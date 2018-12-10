@@ -1,0 +1,60 @@
+#都需要最后带 /
+is-need-save-img: false
+img-path: /opt/lampp/htdocs/geely/
+url-path: http://10.50.102.166/geely/
+
+ip-white-list: '*' #英文都好分割
+ip-black-list: '192.168.1.225' #英文都好分割
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8088/eureka/
+# Tomcat
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+# mysql
+spring:
+  # 环境 dev|test|pro
+  profiles:
+    active: vip
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  #一定要加，不加上传的图片过大无法处理
+  http:
+    multipart:
+      max-file-size: 20Mb
+      max-request-size: 20Mb
+renren:
+  redis:
+    open: false  # 是否开启redis缓存  true开启   false关闭
+  shiro:
+    redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
+
+#解决跨域
+#kuayu-origin: http://japi.waterever.cn
+kuayu-origin: "*"
+kuayu-methods: POST,GET,PATCH,OPTIONS,HEAD,DELETE
+kuayu-max-age: 3600
+kuayu-headers: reffers, Authorization, Origin, X-Requested-With, Content-Type, Accept
+#解决跨域
+swagger:
+  basepackage: com.baymin.restroomapi
+  title: @project.name@
+  terms-of-service-url: http://www.galileo-ai.com
+  contact: zw@galileo-ai.com
+  version: @project.version@
+  description: @project.description@ #后台接口,接口参数区分大小写 \r\n 命名规则 如 =》线体:电装线>工位:电装线>岗位|示例：T01A01|T:线体 01:工位 A:岗位 01:算法
+
+#在application.properties文件中引入日志配置文件
+#=====================================  log  =============================
+logging:
+  config: classpath:log.xml
