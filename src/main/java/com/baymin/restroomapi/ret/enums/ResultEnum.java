@@ -16,11 +16,15 @@ public enum ResultEnum {
     LIST_EMPTY(102,"数据为空"),
     UPDATE_EMPTY(103,"未找到更新的数据"),
 
+    NO_LIST(1101,"数据为空"),
+
     FAIL_ADD_USER(1001,"新增用户失败"),
     FAIL_ADD_USER_ALLREADY_EXIT(1002,"用户编号已经存在"),
     FAIL_USER_LOGIN(1102,"选择岗位不存在"),
 
-    NO_USER_LIST(1101,"数据为空"),
+    FAIL_ADD_RESTROOM(1011,"新增厕所失败"),
+    FAIL_ADD_RESTROOM_ALLREADY_EXIT(1012,"该区域已经存在"),
+
     FAIL_INSERT_ERROR_ALLREADY_CARMODEL(1201,"已经存在该车型,更新操作失败"),
     FAIL_INSERT_ERROR_ALLREADY_RULE(1202,"已经存在的命名规则"),
     FAIL_NO_WORKPOST(1203,"选择岗位不存在"),

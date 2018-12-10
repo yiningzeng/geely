@@ -52,7 +52,6 @@
             <version>4.7.0</version>
         </dependency>
 
-
         <!--日志自动注解-->
         <dependency>
             <groupId>org.projectlombok</groupId>

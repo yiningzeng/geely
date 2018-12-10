@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     Object login(String username,String password,String token){
         String salt=userDao.findSaltByUsername(username);
         if(salt==null)return R.error(ResultEnum.USER_UN_REGIST);
-        Optional<User>optionalUser= userDao.findByUsernameAndPasswordAndUserType(username,Utils.sha256(password,salt+"-"+username),1);
+        Optional<User>optionalUser= userDao.findByUsernameAndPasswordAndUserStatus(username,Utils.sha256(password,salt+"-"+username),1);
         optionalUser.ifPresent(v->v.setToken(token));
         return R.ret(optionalUser,ResultEnum.USER_ERR_PASS);
     }
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object findAll(Integer userType,User userConditions, Pageable pageable) throws MyException {
         Page<User> retPage= userDao.findAll(userSpecs.userList(userConditions),pageable);//userDao.findAll(example,pageable);
-        if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_USER_LIST,retPage);
+        if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
     }
 
     @Override

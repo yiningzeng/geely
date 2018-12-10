@@ -29,7 +29,7 @@ public interface UserDao extends JpaRepository<User, Integer>,JpaSpecificationEx
 
 
 
-    Optional<User> findByUsernameAndPasswordAndUserType(String username,String password,Integer userType);
+    Optional<User> findByUsernameAndPasswordAndUserStatus(String username,String password,Integer userStatus);
 
 
     @Query(name = "查询用户加密盐",value = "select salt from user u where u.username=?1", nativeQuery = true)

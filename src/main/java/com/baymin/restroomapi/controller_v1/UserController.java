@@ -24,7 +24,6 @@ import java.util.UUID;
 @Validated
 @Api(description = "用户操作接口")
 public class UserController {
-    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -37,7 +36,7 @@ public class UserController {
             @ApiImplicitParam(name = "password", value = "密码",defaultValue = "e10adc3949ba59abbe56e057f20f883e", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "department", value = "部门",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "level", value = "员工技能等级",defaultValue = "2",required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "userType", value = "用户类型{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "userStatus", value = "用户类型{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
     })
     @PostMapping("/user")
     public Object save(@RequestParam(value = "username") String username,
@@ -45,14 +44,14 @@ public class UserController {
                        @RequestParam(value = "password",defaultValue = "e10adc3949ba59abbe56e057f20f883e") String password,
                        @RequestParam(value = "department",required = false) String department,
                        @RequestParam(value = "level",defaultValue = "2") Integer levelId,
-                       @RequestParam(value = "userType",defaultValue = "1") Integer userType)throws MyException{
+                       @RequestParam(value = "userStatus",defaultValue = "1") Integer userStatus)throws MyException{
         String salt=UUID.randomUUID().toString();
         User u=new User();
         u.setUsername(username);
         u.setRelName(relName);
         u.setPassword(Utils.sha256(password,salt+"-"+username));
         u.setDepartment(department);
-        u.setUserType(userType);
+        u.setUserStatus(userStatus);
         u.setSalt(salt);
         u.setLevel(userService.findLevelById(levelId));
         u.setUserHeadUrl("https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png");

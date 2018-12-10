@@ -29,7 +29,7 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   #一定要加，不加上传的图片过大无法处理
-  http:
+  servlet:
     multipart:
       max-file-size: 20Mb
       max-request-size: 20Mb
