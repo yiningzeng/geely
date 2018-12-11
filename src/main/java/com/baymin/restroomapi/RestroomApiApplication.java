@@ -1,6 +1,8 @@
 package com.baymin.restroomapi;
 
+import com.baymin.restroomapi.dao.UserDao;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,6 +32,7 @@ public class RestroomApiApplication {
 
     @Value("${server.port}")
     private String port;
+
 
 
     public static void main(String[] args) {

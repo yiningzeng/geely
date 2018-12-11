@@ -2,6 +2,7 @@ package com.baymin.restroomapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by baymin on 18-07-08.
@@ -27,7 +30,7 @@ import java.util.Date;
 public class DeviceCamera implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "摄像头id", example = "1")
     private Integer cameraId;
     @ApiModelProperty(value = "摄像头公网ip", example = "anything")
@@ -41,6 +44,13 @@ public class DeviceCamera implements Serializable {
     //@Temporal(TemporalType.TIMESTAMP)
     @ApiModelProperty(value = "创建时间", example = "1")
     private Date createTime = new Date();
+
+    @OneToMany(mappedBy = "deviceCamera",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
+    @ApiModelProperty(value = "单个摄像头采集的人流数据")
+    private List<InfoPassengerFlow> infoPassengerFlows= new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)

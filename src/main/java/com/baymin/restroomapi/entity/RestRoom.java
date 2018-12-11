@@ -25,7 +25,7 @@ import java.util.List;
 @ApiModel(value = "restroom:厕所类")
 public class RestRoom implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer restRoomId;
     @ApiModelProperty(value = "厕所名称",example = "碧海蓝天5星级公厕")
     private String restRoomName;
@@ -33,6 +33,8 @@ public class RestRoom implements Serializable {
     private String region;
     @ApiModelProperty(value = "详细地址",example = "和邦大厦公厕",notes = "notes")
     private String address;
+    @ApiModelProperty(value = "责任保洁",example = "马化腾")
+    private String cleaner;
     @ApiModelProperty(value = "备注",example = "国内一流",notes = "notes")
     private String remark;
     @ApiModelProperty(value = "状态",example = "0：厕所关闭|1：厕所对外开放")
@@ -45,6 +47,7 @@ public class RestRoom implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonManagedReference
+    @ApiModelProperty(value = "厕所里摄像头")
     private List<DeviceCamera> deviceCameras= new ArrayList<>();
 
 
@@ -52,13 +55,31 @@ public class RestRoom implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonManagedReference
+    @ApiModelProperty(value = "厕所里公告屏")
     private List<DeviceBulletinBoard> deviceBulletinBoards= new ArrayList<>();
 
     @OneToMany(mappedBy = "restRoom",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonManagedReference
+    @ApiModelProperty(value = "厕所里气体检测")
     private List<DeviceGas> deviceGases= new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "restRoom",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
+    @ApiModelProperty(value = "厕所人流数据")
+    private List<InfoPassengerFlow> infoPassengerFlows= new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "restRoom",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
+    @ApiModelProperty(value = "厕所气体数据")
+    private List<InfoGas> infoGases= new ArrayList<>();
 
     public void addDeviceCamera(DeviceCamera comment) {
         deviceCameras.add(comment);

@@ -30,7 +30,7 @@ public class User implements Serializable {
     private String token;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "用户存储的key", example = "1")
     private Integer userId;
     @ApiModelProperty(value = "用户登录名", example = "lala")

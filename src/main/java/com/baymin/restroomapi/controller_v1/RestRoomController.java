@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,40 +39,48 @@ public class RestRoomController {
             @ApiImplicitParam(name = "name", value = "公厕名称", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "region", value = "所属行政区",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "address", value = "详细地址", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "remark", value = "备注",required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "cleaner", value = "责任保洁", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
     })
     @PostMapping("/restroom")
     public Object save(@RequestParam(value = "name") String name,
                        @RequestParam(value = "region") String region,
                        @RequestParam(value = "address") String address,
+                       @RequestParam(value = "cleaner",required = false) String cleaner,
                        @RequestParam(value = "remark",required = false) String remark,
                        @RequestParam(value = "status",defaultValue = "1") Integer status)throws MyException{
         RestRoom restRoom=new RestRoom();
         restRoom.setRestRoomName(name);
         restRoom.setRegion(region);
         restRoom.setAddress(address);
+        restRoom.setCleaner(cleaner);
         restRoom.setRemark(remark);
         restRoom.setStatus(status);
         return restRoomService.save(restRoom);
     }
 
-    @ApiOperation(value="编辑用户")
+    @ApiOperation(value="编辑厕所")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "username", value = "用户登录号", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "relName", value = "用户姓名", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "department", value = "部门", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "level", value = "员工技能等级", dataType = "string", paramType = "query"),
-            //@ApiImplicitParam(name = "userType", value = "用户类型{0：后台账户|1：app端}",defaultValue = "0",required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "restRoomId", value = "公厕id", required = true,dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "name", value = "公厕名称", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "region", value = "所属行政区", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "address", value = "详细地址",dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "cleaner", value = "责任保洁", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}", dataType = "string", paramType = "query"),
     })
     @PatchMapping("/restroom")
-    public Object update(@RequestParam(value = "username") String username,
-                       @RequestParam(value = "relName") String relName,
-                       @RequestParam(value = "department") String department,
-                       @RequestParam(value = "level") Integer levelId)throws MyException{
+    public Object update(@RequestParam(value = "restRoomId") Integer restRoomId,
+                         @RequestParam(value = "name",required = false) String name,
+                         @RequestParam(value = "region",required = false) String region,
+                         @RequestParam(value = "address",required = false) String address,
+                         @RequestParam(value = "cleaner",required = false) String cleaner,
+                         @RequestParam(value = "remark",required = false) String remark,
+                         @RequestParam(value = "status",required = false) Integer status)throws MyException{
 
-        return restRoomService.updateByRestRoomId(username,relName,department,levelId);
+        return restRoomService.updateByRestRoomId(restRoomId,Optional.ofNullable(name),Optional.ofNullable(region),Optional.ofNullable(address),Optional.ofNullable(cleaner),Optional.ofNullable(remark),Optional.ofNullable(status));
     }
 
 
@@ -91,7 +100,7 @@ public class RestRoomController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "获取公厕列表[分页]", response = User.class)
+    @ApiOperation(value = "获取公厕列表[分页]", response = RestRoom.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "status", value = "状态", dataType = "string", paramType = "query"),
@@ -109,15 +118,20 @@ public class RestRoomController {
                                     @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
                                     @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
                                     ) throws Exception {
-        RestRoom restRoom=new RestRoom();
-        Optional.ofNullable(status).ifPresent(v->restRoom.setStatus(v));
-        Optional.ofNullable(keyword).ifPresent(v->{
-            restRoom.setRemark(keyword);
-            restRoom.setRegion(keyword);
-            restRoom.setAddress(keyword);
-            restRoom.setRestRoomName(keyword);
-        });
-        return restRoomService.findAll(restRoom, PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
+        Pageable pageable=PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField);
+        if(Optional.ofNullable(keyword).isPresent()){
+            RestRoom restRoom=new RestRoom();
+            Optional.ofNullable(status).ifPresent(v->restRoom.setStatus(v));
+            Optional.ofNullable(keyword).ifPresent(v->{
+                restRoom.setRemark(keyword);
+                restRoom.setRegion(keyword);
+                restRoom.setAddress(keyword);
+                restRoom.setRestRoomName(keyword);
+            });
+            return restRoomService.findAll(restRoom, pageable);
+        }
+        return restRoomService.findAll(null,pageable);
+
 
     }
 

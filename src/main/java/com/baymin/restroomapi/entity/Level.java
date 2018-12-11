@@ -24,15 +24,16 @@ import java.util.Set;
 @ApiModel(value = "Level:用户技能等级")
 public class Level implements Serializable {
     @Id
-    @GeneratedValue
     @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer levelId;
     @ApiModelProperty(value = "技能等级名称",example = "水平1/4")
     private String levelName;
     @ApiModelProperty(value = "技能等级备注",example = "可干，有速度",notes = "notes")
     private String remark;
-    @ApiModelProperty(value = "状态",example = "可上岗")
-    private String status;
+
+    @ApiModelProperty(value = "状态",example = "0：全组禁止|1：开放")
+    private Integer status;
     //@Temporal(TemporalType.TIMESTAMP)
     @JsonIgnore
     private Date createTime = new Date();

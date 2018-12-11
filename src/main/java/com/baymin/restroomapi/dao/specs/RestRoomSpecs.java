@@ -28,7 +28,7 @@ public class RestRoomSpecs {
                 Optional.ofNullable(conditions.getAddress()).ifPresent(v->list.add(cb.like(root.get("address"), "%"+conditions.getAddress()+"%")));
                 Optional.ofNullable(conditions.getRegion()).ifPresent(v->list.add(cb.like(root.get("region"), "%"+conditions.getRegion()+"%")));
                 Optional.ofNullable(conditions.getRemark()).ifPresent(v->list.add(cb.like(root.get("remark"), "%"+conditions.getRemark()+"%")));
-                Optional.ofNullable(conditions.getStatus()).ifPresent(v->list.add(cb.like(root.get("status"), conditions.getRegion())));
+//                Optional.ofNullable(conditions.getStatus()).ifPresent(v->list.add(cb.like(root.get("status"), ""+conditions.getStatus())));
 //                Optional.ofNullable(conditions.getCarModels()).ifPresent(v->list.add(cb.like(root.get("carModels"), "%"+conditions.getCarModels()+"%")));
                 return cb.or(list.toArray(new Predicate[list.size()]));
             }

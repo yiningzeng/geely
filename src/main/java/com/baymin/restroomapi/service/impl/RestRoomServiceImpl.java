@@ -11,15 +11,15 @@ import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.service.RestRoomService;
 import com.baymin.restroomapi.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
-
+@Slf4j
 @Service
 public class RestRoomServiceImpl implements RestRoomService {
     @Autowired
@@ -28,15 +28,27 @@ public class RestRoomServiceImpl implements RestRoomService {
     private RestRoomDao restRoomDao;
 
 
-//    @Override
-//    public Object updateByUsername(String username, String relName, String department,Integer levelId) throws MyException {
-//        if(userDao.updateUserByUsername(username,relName,department,levelId)>0)return R.success();
-//        else return R.error(ResultEnum.UPDATE_EMPTY);
-//    }
-
     @Override
-    public Object updateByRestRoomId(String username, String relName, String department, Integer levelId) throws MyException {
-        return null;
+    public Object updateByRestRoomId(Integer restRoomId, Optional<String> name, Optional<String> region, Optional<String> address,Optional<String> cleaner, Optional<String> remark, Optional<Integer> status) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                RestRoom restRoom=(RestRoom)data;
+                name.ifPresent(v->restRoom.setRestRoomName(v));
+                region.ifPresent(v->restRoom.setRegion(v));
+                address.ifPresent(v->restRoom.setAddress(v));
+                cleaner.ifPresent(v->restRoom.setCleaner(v));
+                remark.ifPresent(v->restRoom.setRemark(v));
+                status.ifPresent(v->restRoom.setStatus(v));
+                if(restRoomDao.save(restRoom)!=null) return R.success();
+                return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+            }
+
+            @Override
+            public Object onFalse() {
+               return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
+            }
+        });
     }
 
     @Override
@@ -57,14 +69,37 @@ public class RestRoomServiceImpl implements RestRoomService {
 
     @Override
     public Object deleteByRestRoomId(Integer restRoomId) throws MyException {
-        restRoomDao.deleteById(restRoomId);
-        restRoomDao.flush();
-        return R.success();
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                restRoomDao.deleteById(restRoomId);
+                restRoomDao.flush();
+                return R.success();
+            }
+
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
+            }
+        });
+
     }
 
     @Override
     public Object findAll(RestRoom specs, Pageable pageable) throws MyException {
-        Page<RestRoom> retPage= restRoomDao.findAll(restRoomSpecs.listSpecsIni(specs),pageable);//userDao.findAll(example,pageable);
-        if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
+        return R.callBackRet(Optional.ofNullable(specs), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                Page<RestRoom> retPage= restRoomDao.findAll(restRoomSpecs.listSpecsIni(specs),pageable);//userDao.findAll(example,pageable);
+                if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
+            }
+
+            @Override
+            public Object onFalse() {
+                Page<RestRoom> retPage= restRoomDao.findAll(pageable);//userDao.findAll(example,pageable);
+                if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
+            }
+        });
+
     }
 }
