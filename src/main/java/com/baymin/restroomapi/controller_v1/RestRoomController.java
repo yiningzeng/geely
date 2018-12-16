@@ -28,8 +28,27 @@ import java.util.UUID;
 @Validated
 @Api(description = "公厕操作接口")
 public class RestRoomController {
+    //阿里云-飞天一部 无诤 算法工厂
+//素材 应用开发
+//ioe+greenplum+hadoop
+    //tss 远程系统
 
+    //etl
+    //多源异构
+    //asql
+    //oem
+    //数据建模 数据门户
 
+    //agent集群
+
+    //实时数据在 datahub
+    //分层
+    //ods层 客户数据轻量的清洗
+    //dws层 数据明细
+
+    //tdm层
+    //flink task
+    //dmz安全区域
     @Autowired
     private RestRoomService restRoomService;
 
