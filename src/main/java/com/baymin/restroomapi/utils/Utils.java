@@ -1,7 +1,6 @@
 package com.baymin.restroomapi.utils;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
-import sun.misc.BASE64Decoder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -206,41 +205,5 @@ public class Utils {
             System.out.println("创建目录" + destDirName + "失败！");
             return false;
         }
-    }
-
-    /**
-     * base64字符串转换成图片
-     * @param imgStr		base64字符串
-     * @param imgFilePath	图片存放路径
-     * @return
-     *
-     * @author ZHANGJL
-     * @dateTime 2018-02-23 14:42:17
-     */
-    public static Optional<String> Base64ToImage(String imgStr, String imgFilePath) { // 对字节数组字符串进行Base64解码并生成图片
-
-        if (imgStr==null||imgStr=="") // 图像数据为空
-            return Optional.ofNullable(null);
-
-        BASE64Decoder decoder = new BASE64Decoder();
-        try {
-            // Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
-            for (int i = 0; i < b.length; ++i) {
-                if (b[i] < 0) {// 调整异常数据
-                    b[i] += 256;
-                }
-            }
-
-            OutputStream out = new FileOutputStream(imgFilePath);
-            out.write(b);
-            out.flush();
-            out.close();
-
-            return Optional.ofNullable(imgFilePath);
-        } catch (Exception e) {
-            return Optional.ofNullable(null);
-        }
-
     }
 }

@@ -40,7 +40,6 @@ public class DeviceBulletinBoard implements Serializable {
     @ApiModelProperty(value = "创建时间", example = "1")
     private Date createTime = new Date();
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restRoomId")
     @JsonBackReference
