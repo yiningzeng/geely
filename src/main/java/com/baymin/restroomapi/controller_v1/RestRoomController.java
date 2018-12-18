@@ -29,7 +29,6 @@ import java.util.UUID;
 @Api(description = "公厕操作接口")
 public class RestRoomController {
 
-
     @Autowired
     private RestRoomService restRoomService;
 
@@ -63,7 +62,7 @@ public class RestRoomController {
     @ApiOperation(value="编辑厕所")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "restRoomId", value = "公厕id", required = true,dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "restRoomId", value = "公厕id", required = true,dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "name", value = "公厕名称", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "region", value = "所属行政区", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "address", value = "详细地址",dataType = "string", paramType = "query"),
@@ -71,8 +70,8 @@ public class RestRoomController {
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}", dataType = "string", paramType = "query"),
     })
-    @PatchMapping("/restroom")
-    public Object update(@RequestParam(value = "restRoomId") Integer restRoomId,
+    @PatchMapping("/restroom/{restRoomId}")
+    public Object update(@PathVariable(value = "restRoomId") Integer restRoomId,
                          @RequestParam(value = "name",required = false) String name,
                          @RequestParam(value = "region",required = false) String region,
                          @RequestParam(value = "address",required = false) String address,

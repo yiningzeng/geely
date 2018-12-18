@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "restroom:厕所类")
+@ApiModel(value = "Restroom:厕所类")
 public class RestRoom implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,6 +90,7 @@ public class RestRoom implements Serializable {
         deviceCameras.remove(comment);
         comment.setRestRoom(null);
     }
+
     public void addDeviceBulletinBoard(DeviceBulletinBoard comment) {
         deviceBulletinBoards.add(comment);
         comment.setRestRoom(this);
@@ -99,6 +100,7 @@ public class RestRoom implements Serializable {
         deviceBulletinBoards.remove(comment);
         comment.setRestRoom(null);
     }
+
     public void addDeviceGas(DeviceGas comment) {
         deviceGases.add(comment);
         comment.setRestRoom(this);
@@ -109,7 +111,4 @@ public class RestRoom implements Serializable {
         comment.setRestRoom(null);
     }
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy="level",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Set<User> users;
 }

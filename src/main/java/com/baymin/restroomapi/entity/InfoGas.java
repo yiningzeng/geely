@@ -22,6 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel(value = "InfoGas:气体统计类")
 public class InfoGas implements Serializable {
+
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)

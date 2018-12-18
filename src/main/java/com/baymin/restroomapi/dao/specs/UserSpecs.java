@@ -26,7 +26,7 @@ public class UserSpecs {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> list = new ArrayList<>();
-                if(Utils.stringIsNotNull(userConditions.getUsername())) list.add(cb.like(root.get("userNumber"), "%"+userConditions.getUsername()+"%"));
+                if(Utils.stringIsNotNull(userConditions.getUsername())) list.add(cb.like(root.get("username"), "%"+userConditions.getUsername()+"%"));
                 if(Utils.stringIsNotNull(userConditions.getDepartment())) list.add(cb.like(root.get("department"), "%"+userConditions.getDepartment()+"%"));
                 if(Utils.stringIsNotNull(userConditions.getRelName())) list.add(cb.like(root.get("relName"), "%"+userConditions.getRelName()+"%"));
                 return cb.or(list.toArray(new Predicate[list.size()]));

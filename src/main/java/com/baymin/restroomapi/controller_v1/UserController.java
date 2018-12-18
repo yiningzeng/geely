@@ -72,7 +72,6 @@ public class UserController {
                        @RequestParam(value = "relName") String relName,
                        @RequestParam(value = "department") String department,
                        @RequestParam(value = "level") Integer levelId)throws MyException{
-
         return userService.updateByUsername(username,relName,department,levelId);
     }
 
@@ -114,7 +113,6 @@ public class UserController {
 
     /**
      * 获取个人列表分页
-     *
      * @return
      * @throws Exception
      */
@@ -134,14 +132,13 @@ public class UserController {
                                     @RequestParam(value = "size", defaultValue = "10") @Min(value = 1, message = "值不能小于1") Integer size,
                                     @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                     @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
-                                    @RequestParam(value = "sortField", defaultValue = "userNumber") String sortField
+                                    @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
                                     ) throws Exception {
         User userConditions = new User();
         userConditions.setUsername(keyword);
         //userConditions.setLevel(keyword);
         userConditions.setDepartment(keyword);
         userConditions.setRelName(keyword);
-
 //        ExampleMatcher matcher = ExampleMatcher.matching()
 //                .withMatcher("userNumber", ExampleMatcher.GenericPropertyMatchers.startsWith())//模糊查询匹配开头，即{username}%
 ////                .withMatcher("relName" ,ExampleMatcher.GenericPropertyMatchers.contains())//全部模糊查询，即%{address}%
@@ -149,12 +146,10 @@ public class UserController {
 ////                .withMatcher("department" ,ExampleMatcher.GenericPropertyMatchers.contains())//全部模糊查询，即%{address}%
 //                .withIgnorePaths("password","userId","salt","userType","createTime");//忽略字段，即不管password是什么值都不加入查询条件
 //        Example<User> example = Example.of(user ,matcher);
-
         //Sort.Direction dir="asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC;
         //Pageable pageable=PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField);
         //PageRequest.of(page, size, "asc".equals(sortType) ? Sort.Direction.ASC : Sort.Direction.DESC, sortField)
         return userService.findAll(userType,userConditions, PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
-
     }
 
 

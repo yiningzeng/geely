@@ -25,6 +25,7 @@ public enum ResultEnum {
     FAIL_ADD_RESTROOM(1011,"新增厕所失败"),
     FAIL_ADD_RESTROOM_ALLREADY_EXIT(1012,"该区域已经存在"),
     FAIL_DO_NO_RESTROOM(1013,"该厕所不存在"),
+    FAIL_DO_NO_DEVICE(1014,"该设备不存在"),
 
     FAIL_INSERT_ERROR_ALLREADY_CARMODEL(1201,"已经存在该车型,更新操作失败"),
     FAIL_INSERT_ERROR_ALLREADY_RULE(1202,"已经存在的命名规则"),

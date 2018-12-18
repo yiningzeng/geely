@@ -33,10 +33,18 @@ public class DeviceCamera implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "摄像头id", example = "1")
     private Integer cameraId;
-    @ApiModelProperty(value = "摄像头公网ip", example = "anything")
+
+    @ApiModelProperty(value = "摄像头公网ip带端口号", example = "anything")
     private String ip;
-//    @ApiModelProperty(value = "客流量", example = "12")
-//    private String passengerFlow;
+
+    @ApiModelProperty(value = "摄像头用户名")
+    private String username;
+
+    @ApiModelProperty(value = "摄像头密码")
+    private String password;
+
+    @ApiModelProperty(value = "备注", example = "坑位正上方")
+    private String remark;
 
     @ApiModelProperty(value = "摄像头类型{0：禁用|1：启用}", example = "1")
     private Integer status=1;
