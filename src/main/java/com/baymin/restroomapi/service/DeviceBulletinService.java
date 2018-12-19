@@ -1,7 +1,6 @@
 package com.baymin.restroomapi.service;
 
-import com.baymin.restroomapi.entity.DeviceBulletinBoard;
-import com.baymin.restroomapi.entity.RestRoom;
+import com.baymin.restroomapi.entity.DeviceBoard;
 import com.baymin.restroomapi.ret.exception.MyException;
 import org.springframework.data.domain.Pageable;
 
@@ -22,11 +21,11 @@ public interface DeviceBulletinService {
 
     /**
      * 新增
-     * @param deviceBulletinBoard
+     * @param deviceBoard
      * @return
      * @throws MyException
      */
-    Object save(DeviceBulletinBoard deviceBulletinBoard) throws MyException;
+    Object save(DeviceBoard deviceBoard) throws MyException;
 
     /**
      * 删除
@@ -43,6 +42,6 @@ public interface DeviceBulletinService {
      * @return
      * @throws MyException
      */
-    Object findAll(DeviceBulletinBoard specs, Pageable pageable)throws MyException;
+    Object findAll(DeviceBoard specs, Pageable pageable)throws MyException;
 
 }

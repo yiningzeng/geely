@@ -56,7 +56,7 @@ public class RestRoom implements Serializable {
             orphanRemoval = true)
     @JsonManagedReference
     @ApiModelProperty(value = "厕所里公告屏")
-    private List<DeviceBulletinBoard> deviceBulletinBoards= new ArrayList<>();
+    private List<DeviceBoard> deviceBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "restRoom",
             cascade = CascadeType.ALL,
@@ -91,13 +91,13 @@ public class RestRoom implements Serializable {
         comment.setRestRoom(null);
     }
 
-    public void addDeviceBulletinBoard(DeviceBulletinBoard comment) {
-        deviceBulletinBoards.add(comment);
+    public void addDeviceBulletinBoard(DeviceBoard comment) {
+        deviceBoards.add(comment);
         comment.setRestRoom(this);
     }
 
-    public void removeDeviceBulletinBoard(DeviceBulletinBoard comment) {
-        deviceBulletinBoards.remove(comment);
+    public void removeDeviceBulletinBoard(DeviceBoard comment) {
+        deviceBoards.remove(comment);
         comment.setRestRoom(null);
     }
 

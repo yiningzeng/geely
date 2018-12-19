@@ -22,8 +22,8 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "DeviceBulletinBoard:公告屏类")
-public class DeviceBulletinBoard implements Serializable {
+@ApiModel(value = "DeviceBoard:公告屏类")
+public class DeviceBoard implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +49,7 @@ public class DeviceBulletinBoard implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DeviceCamera )) return false;
-        return boarId != null && boarId.equals(((DeviceBulletinBoard) o).boarId);
+        return boarId != null && boarId.equals(((DeviceBoard) o).boarId);
     }
     @Override
     public int hashCode() {
