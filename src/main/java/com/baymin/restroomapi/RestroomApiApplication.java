@@ -1,6 +1,7 @@
 package com.baymin.restroomapi;
 
 import com.baymin.restroomapi.dao.UserDao;
+import com.baymin.restroomapi.entity.FuckFlow;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -40,7 +41,7 @@ public class RestroomApiApplication {
         SpringApplication.run(RestroomApiApplication.class, args);
     }
     @PostMapping("/test")
-    public Object post() throws Exception {
+    public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
         log.info("==============end===============");
         return port;
     }
