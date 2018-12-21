@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/device")
 @Slf4j
 @Validated
-@Api(description = "摄像头操作接口")
+@Api(description = "摄像头操作接口done")
 public class DeviceCameraController {
 
     @Autowired

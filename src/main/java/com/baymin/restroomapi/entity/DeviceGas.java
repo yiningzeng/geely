@@ -30,11 +30,16 @@ public class DeviceGas implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "设备id", example = "1")
+    @ApiModelProperty(value = "id", example = "1")
     private Integer gasId;
 
+    @ApiModelProperty(value = "硬件方设备id", example = "1")
+    private Integer gasDeviceId;
 //    @ApiModelProperty(value = "客流量", example = "12")
 //    private String passengerFlow;
+
+    @ApiModelProperty(value = "{0：男厕|1：女厕}")
+    private Integer type;
 
     @ApiModelProperty(value = "空气检测类型{0：禁用|1：启用}", example = "1")
     private Integer status=1;

@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1")
 @Slf4j
 @Validated
-@Api(description = "公厕操作接口")
+@Api(description = "公厕操作接口done")
 public class RestRoomController {
 
     @Autowired

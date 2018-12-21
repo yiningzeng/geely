@@ -27,6 +27,10 @@ public class InfoGas implements Serializable {
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ApiModelProperty(value = "数据采集终端id")
+    private Integer funcId;
+
     @ApiModelProperty(value = "空气分值",example = "61")
     private Float score;
 
@@ -44,7 +48,7 @@ public class InfoGas implements Serializable {
     private RestRoom restRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gasId")
+    @JoinColumn(name = "gasDeviceId")
     @JsonBackReference
     private DeviceGas deviceGas;
 
