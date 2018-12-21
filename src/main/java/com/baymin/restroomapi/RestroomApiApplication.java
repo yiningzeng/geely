@@ -2,6 +2,8 @@ package com.baymin.restroomapi;
 
 import com.baymin.restroomapi.dao.UserDao;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -10,10 +12,7 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -28,6 +27,7 @@ import javax.servlet.MultipartConfigElement;
 @SpringBootApplication
 @Configuration
 @EnableAdminServer
+@Slf4j
 public class RestroomApiApplication {
 
     @Value("${server.port}")
@@ -39,10 +39,21 @@ public class RestroomApiApplication {
 
         SpringApplication.run(RestroomApiApplication.class, args);
     }
-//    @PostMapping("/login.html")
-//    public Object post() throws Exception {
-//        return port;
-//    }
+    @PostMapping("/test")
+    public Object post() throws Exception {
+        log.info("==============end===============");
+        return port;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/test/json", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String getByJSON(@RequestBody JSONObject jsonParam) {
+        // 直接将json信息打印出来
+//        System.out.println(jsonParam.toJSONString());
+        log.info(jsonParam.toJSONString());
+        log.info("==============end===============");
+        return "res";
+    }
 //
 //    @GetMapping("/ip")
 //    public Object test() throws Exception {
