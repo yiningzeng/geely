@@ -26,7 +26,7 @@ public interface RestRoomService {
      * @return
      * @throws MyException
      */
-    Object updateByRestRoomId(Integer restRoomId, Optional<String> name,Optional<String> region,Optional<String> address,Optional<String> cleaner,Optional<String> remark,Optional<Integer> status)throws MyException;
+    Object updateByRestRoomId(Integer restRoomId, Optional<String> name,Optional<String> ip,Optional<String> region,Optional<String> address,Optional<String> cleaner,Optional<String> remark,Optional<Integer> status)throws MyException;
 
     /**
      * 新增公厕

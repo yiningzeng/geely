@@ -29,6 +29,8 @@ public class RestRoom implements Serializable {
     private Integer restRoomId;
     @ApiModelProperty(value = "厕所名称",example = "碧海蓝天5星级公厕")
     private String restRoomName;
+    @ApiModelProperty(value = "公厕ip",example = "ip")
+    private String ip;
     @ApiModelProperty(value = "图片路径",example = "",notes = "notes")
     private String img="https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/map/pic/item/a9d3fd1f4134970a4f3e0c1398cad1c8a7865db8.jpg";
     @ApiModelProperty(value = "备注",example = "浙江省 宁波市 鄞州区",notes = "notes")

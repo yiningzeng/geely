@@ -5,7 +5,7 @@
 
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.6.36-RELEASE</version>
+    <version>v1.0.36-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>接口</name>

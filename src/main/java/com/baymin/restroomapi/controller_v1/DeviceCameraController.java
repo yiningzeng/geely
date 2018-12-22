@@ -34,7 +34,7 @@ public class DeviceCameraController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "restRoomId", value = "厕所编号",required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "ip", value = "公厕ip可带端口", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "ip", value = "公厕ip可带端口", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "username", value = "设备的username", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "设备的password", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
@@ -42,7 +42,7 @@ public class DeviceCameraController {
     })
     @PostMapping("/camera")
     public Object save(@RequestParam(value = "restRoomId") Integer restRoomId,
-                       @RequestParam(value = "ip") String ip,
+                       @RequestParam(value = "ip",required = false) String ip,
                        @RequestParam(value = "username") String username,
                        @RequestParam(value = "password") String password,
                        @RequestParam(value = "remark",required = false) String remark,
@@ -98,20 +98,22 @@ public class DeviceCameraController {
     @ApiOperation(value = "获取摄像头列表[分页]", response = RestRoom.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId", value = "摄像头id",required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "status", value = "状态", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "page", defaultValue = "0", value = "页数,不传默认0", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "size", defaultValue = "10", value = "每页数量,不传默认10", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "sortType", value = "排序类型",defaultValue = "desc",required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "sortField", value = "排序字段",defaultValue = "createTime",required = false, dataType = "string", paramType = "query")
     })
-    @GetMapping(value = "/camera")
-    public Object getRestRoomListByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                    @RequestParam(value = "status", required = false) Integer status,
-                                    @RequestParam(value = "size", defaultValue = "10") @Min(value = 1, message = "值不能小于1") Integer size,
-                                    @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
-                                    @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
-                                    ) throws Exception {
-        return deviceCameraService.findAll(Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
+    @GetMapping(value = "/camera/{restRoomId}")
+    public Object getRestRoomListByPage(
+            @PathVariable(value = "restRoomId") Integer restRoomId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "status", required = false) Integer status,
+            @RequestParam(value = "size", defaultValue = "10") @Min(value = 1, message = "值不能小于1") Integer size,
+            @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
+            @RequestParam(value = "sortField", defaultValue = "createTime") String sortField) throws Exception {
+        return deviceCameraService.findAll(restRoomId,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
 

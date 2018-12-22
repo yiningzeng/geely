@@ -86,7 +86,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
     }
 
     @Override
-    public Object findAll(Optional<Integer> status,Pageable pageable) throws MyException {
+    public Object findAll(Integer restRoomId,Optional<Integer> status,Pageable pageable) throws MyException {
         return R.callBackRet(status, new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
@@ -95,7 +95,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
             }
             @Override
             public Object onFalse() {
-                Page<DeviceCamera> retPage= deviceCameraDao.findAll(pageable);//userDao.findAll(example,pageable);
+                Page<DeviceCamera> retPage= deviceCameraDao.findAllByRestRoom_RestRoomId(restRoomId,pageable);//userDao.findAll(example,pageable);
                 if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
             }
         });

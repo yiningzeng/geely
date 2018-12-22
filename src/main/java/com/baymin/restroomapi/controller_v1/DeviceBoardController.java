@@ -109,7 +109,7 @@ public class DeviceBoardController {
                                     @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
                                     @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
                                     ) throws Exception {
-        return deviceCameraService.findAll(Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
+        return deviceCameraService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
 

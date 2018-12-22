@@ -29,12 +29,13 @@ public class RestRoomServiceImpl implements RestRoomService {
 
 
     @Override
-    public Object updateByRestRoomId(Integer restRoomId, Optional<String> name, Optional<String> region, Optional<String> address,Optional<String> cleaner, Optional<String> remark, Optional<Integer> status) throws MyException {
+    public Object updateByRestRoomId(Integer restRoomId, Optional<String> name,Optional<String> ip, Optional<String> region, Optional<String> address,Optional<String> cleaner, Optional<String> remark, Optional<Integer> status) throws MyException {
         return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
                 RestRoom restRoom=(RestRoom)data;
                 name.ifPresent(v->restRoom.setRestRoomName(v));
+                ip.ifPresent(v->restRoom.setIp(v));
                 region.ifPresent(v->restRoom.setRegion(v));
                 address.ifPresent(v->restRoom.setAddress(v));
                 cleaner.ifPresent(v->restRoom.setCleaner(v));

@@ -42,7 +42,8 @@ public class RestroomApiApplication {
     }
     @PostMapping("/test")
     public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
-        log.info("==============end===============");
+
+        log.info("==============end==============={}",fuckFlow.toString());
         return port;
     }
 

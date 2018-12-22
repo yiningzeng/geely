@@ -53,13 +53,6 @@ public class DeviceCamera implements Serializable {
     @ApiModelProperty(value = "创建时间", example = "1")
     private Date createTime = new Date();
 
-    @OneToMany(mappedBy = "deviceCamera",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonManagedReference
-    @ApiModelProperty(value = "单个摄像头采集的人流数据")
-    private List<InfoPassengerFlow> infoPassengerFlows= new ArrayList<>();
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restRoomId")

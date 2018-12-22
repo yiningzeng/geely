@@ -63,7 +63,7 @@ public class AddSuperMan {
         user.setPassword(Utils.sha256("e10adc3949ba59abbe56e057f20f883e",salt+"-"+"baymin"));
         user.setRelName("超级管理员");
         user.setSalt(salt);
-        user.setUserHeadUrl("https://gitee.com/uploads/62/1403162_waterever_admin.png");
+        user.setUserHeadUrl("https://upload.jianshu.io/users/upload_avatars/6639127/07e46067-9c7b-4df9-9c1f-b590818e295b.jpg");
         userDao.save(user);
         log.info("创建管理员");
         return 1;

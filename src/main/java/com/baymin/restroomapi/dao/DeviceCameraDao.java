@@ -11,5 +11,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface DeviceCameraDao extends JpaRepository<DeviceCamera, Integer>,JpaSpecificationExecutor<DeviceCamera> {
 
+    //弃用不适用
     Page<DeviceCamera> findAllByStatus(Integer status,Pageable pageable);
+
+    Page<DeviceCamera> findAllByRestRoom_RestRoomId(Integer restRoomId,Pageable pageable);
 }

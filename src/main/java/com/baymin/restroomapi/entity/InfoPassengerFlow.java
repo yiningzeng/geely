@@ -26,6 +26,13 @@ public class InfoPassengerFlow implements Serializable {
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ApiModelProperty(value = "通道名称",example = "男厕")
+    private String channelName;
+
+    @ApiModelProperty(value = "设备的ip",example = "关联公厕")
+    private String ip;
+
     @ApiModelProperty(value = "人流总数",example = "1111")
     private Integer number;
     @ApiModelProperty(value = "更新时间")
@@ -38,10 +45,7 @@ public class InfoPassengerFlow implements Serializable {
     @JsonBackReference
     private RestRoom restRoom;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cameraId")
-    @JsonBackReference
-    private DeviceCamera deviceCamera;
+
 
     @Override
     public boolean equals(Object o) {
