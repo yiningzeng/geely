@@ -80,9 +80,8 @@ public class DeviceFlowingController {
                                     @RequestParam(value = "status", required = false) Integer status,
                                     @RequestParam(value = "size", defaultValue = "10") @Min(value = 1, message = "值不能小于1") Integer size,
                                     @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
-                                    @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
-                                    ) throws Exception {
-        return deviceGasService.findAll(Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
+                                    @RequestParam(value = "sortField", defaultValue = "createTime") String sortField) throws Exception {
+        return deviceGasService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
 

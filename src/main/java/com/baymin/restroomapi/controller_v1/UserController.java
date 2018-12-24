@@ -124,7 +124,7 @@ public class UserController {
             @ApiImplicitParam(name = "size", defaultValue = "10", value = "每页数量,不传默认10", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "keyword", value = "查询字段,不传表示不筛选", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "sortType", value = "排序类型",defaultValue = "desc",required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "sortField", value = "排序字段",defaultValue = "userNumber",required = false, dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "sortField", value = "排序字段",defaultValue = "username",required = false, dataType = "string", paramType = "query")
     })
     @GetMapping(value = "/user")
     public Object getUserListByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,

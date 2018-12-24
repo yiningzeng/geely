@@ -19,12 +19,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class DeviceGasServiceImpl implements DeviceGasService {
+
     @Autowired
     private DeviceGasDao deviceGasDao;
     @Autowired
     private RestRoomDao restRoomDao;
-
-
 
     @Override
     public Object save(Integer restRoomId, DeviceGas deviceGas) throws MyException {
@@ -32,8 +31,17 @@ public class DeviceGasServiceImpl implements DeviceGasService {
             @Override
             public Object onTrue(Object data) {
                 deviceGas.setRestRoom((RestRoom)data);
-                if(deviceGasDao.save(deviceGas)!=null)return R.success();
-                return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+                return R.callBackRet(deviceGasDao.findFirstByGasDeviceId(deviceGas.getGasDeviceId()), new R.OptionalResult() {
+                    @Override
+                    public Object onTrue(Object data) {
+                        return R.error(ResultEnum.FAIL_ALLREADY_HAVE_DEVICE);
+                    }
+                    @Override
+                    public Object onFalse() {
+                        if(deviceGasDao.save(deviceGas)!=null)return R.success();
+                        return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+                    }
+                });
             }
             @Override
             public Object onFalse() {
@@ -41,7 +49,6 @@ public class DeviceGasServiceImpl implements DeviceGasService {
             }
         });
     }
-
 
     @Override
     public Object deleteByDeviceGasId(Integer deviceGasId) throws MyException {
@@ -60,7 +67,7 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     }
 
     @Override
-    public Object findAll(Optional<Integer> status,Pageable pageable) throws MyException {
+    public Object findAll(Integer restRoomId,Optional<Integer> status,Pageable pageable) throws MyException {
         return R.callBackRet(status, new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
@@ -69,10 +76,9 @@ public class DeviceGasServiceImpl implements DeviceGasService {
             }
             @Override
             public Object onFalse() {
-                Page<DeviceGas> retPage= deviceGasDao.findAll(pageable);//userDao.findAll(example,pageable);
+                Page<DeviceGas> retPage= deviceGasDao.findAllByRestRoom_RestRoomId(restRoomId,pageable);//userDao.findAll(example,pageable);
                 if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
             }
         });
-
     }
 }

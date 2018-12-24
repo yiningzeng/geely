@@ -48,6 +48,6 @@ public interface DeviceGasService {
      * @return
      * @throws MyException
      */
-    Object findAll(Optional<Integer> status, Pageable pageable)throws MyException;
+    Object findAll(Integer restRoomId,Optional<Integer> status, Pageable pageable)throws MyException;
 
 }

@@ -31,10 +31,13 @@ public class DeviceGas implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "id", example = "1")
-    private Integer gasId;
+    private Integer id;
 
-    @ApiModelProperty(value = "硬件方设备id", example = "1")
+    @ApiModelProperty(value = "终端id，这个在设备id下面", example = "1")
     private Integer gasDeviceId;
+
+    @ApiModelProperty(value = "硬件方设备id，相当于终端id的父级", example = "1")
+    private Integer gasDeviceParentId;
 //    @ApiModelProperty(value = "客流量", example = "12")
 //    private String passengerFlow;
 
@@ -63,7 +66,7 @@ public class DeviceGas implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DeviceCamera )) return false;
-        return gasId != null && gasId.equals(((DeviceGas) o).gasId);
+        return gasDeviceId != null && gasDeviceId.equals(((DeviceGas) o).gasDeviceId);
     }
     @Override
     public int hashCode() {
