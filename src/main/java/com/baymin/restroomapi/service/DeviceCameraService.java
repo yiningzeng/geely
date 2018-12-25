@@ -51,4 +51,6 @@ public interface DeviceCameraService {
      */
     Object findAll(Integer restRoomId,Optional<Integer> status,Pageable pageable)throws MyException;
 
+    Object push(Integer cameraId) throws MyException;
+    Object stop(Integer cameraId) throws MyException;
 }

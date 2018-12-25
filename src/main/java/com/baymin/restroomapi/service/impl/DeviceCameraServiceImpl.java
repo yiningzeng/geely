@@ -10,8 +10,11 @@ import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.service.DeviceCameraService;
 import com.baymin.restroomapi.service.RestRoomService;
+import com.baymin.restroomapi.utils.ShellKit;
+import com.baymin.restroomapi.utils.StreamGobblerCallback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,12 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
     private DeviceCameraDao deviceCameraDao;
     @Autowired
     private RestRoomDao restRoomDao;
-
+    @Value("${restroom.push}")
+    private String push;
+    @Value("${restroom.stoppush}")
+    private String stopPush;
+    @Value("${restroom.pixel}")
+    private String pixel;
 
     @Override
     public Object updateByDeviceCameraId(Integer deviceCameraId, Optional<Integer> restRoomId, Optional<String> ip,Optional<String> username,Optional<String> password,Optional<String> remark, Optional<Integer> status) throws MyException {
@@ -52,7 +60,6 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
         });
     }
 
-
     @Override
     public Object save(Integer restRoomId, DeviceCamera deviceCamera) throws MyException {
         return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
@@ -68,7 +75,6 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
             }
         });
     }
-
 
     @Override
     public Object deleteByDeviceCameraId(Integer deviceCameraId) throws MyException {
@@ -101,5 +107,51 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
             }
         });
 
+    }
+
+
+    @Override
+    public Object push(Integer cameraId) throws MyException {
+        return R.callBackRet(deviceCameraDao.findById(cameraId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                DeviceCamera deviceCamera = (DeviceCamera) data;
+                if (deviceCamera.getRtsp() == null) return R.error(ResultEnum.FAIL_DEVICE_ERR);
+                try {
+                    StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
+                    ShellKit.runShell(push + " " + cameraId + " " + deviceCamera.getRtsp()+" "+pixel, work);
+                    while (work.isDoing()){
+                        Thread.sleep(5);
+                    }
+                    if(work.getRes().contains("film.m3u8")){
+                        deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
+                        deviceCameraDao.save(deviceCamera);
+                        return R.success(deviceCamera.getLiveUrl());
+                    }
+                    return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR);
+                } catch (Exception e) {
+                    return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+                }
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
+    @Override
+    public Object stop(Integer cameraId) throws MyException {
+        try {
+            StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
+            ShellKit.runShell(stopPush + " " + cameraId, work);
+            while (work.isDoing()){
+                Thread.sleep(5);
+            }
+            if(work.getRes().contains("success"))return R.success();
+            return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+        } catch (Exception e) {
+            return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+        }
     }
 }
