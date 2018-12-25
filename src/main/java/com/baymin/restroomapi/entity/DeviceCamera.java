@@ -43,6 +43,9 @@ public class DeviceCamera implements Serializable {
     @ApiModelProperty(value = "摄像头密码")
     private String password;
 
+    @ApiModelProperty(value = "摄像头rtsp地址")
+    private String rtsp;
+
     @ApiModelProperty(value = "备注", example = "坑位正上方")
     private String remark;
 

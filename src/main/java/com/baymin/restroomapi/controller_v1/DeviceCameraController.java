@@ -49,6 +49,7 @@ public class DeviceCameraController {
                        @RequestParam(value = "status",defaultValue = "1") Integer status)throws MyException{
         DeviceCamera deviceCamera=new DeviceCamera();
         deviceCamera.setIp(ip);
+        deviceCamera.setRtsp("rtsp://"+username+":"+password+"@"+ip+"/h264/ch1/main/av_stream");
         deviceCamera.setUsername(username);
         deviceCamera.setPassword(password);
         deviceCamera.setRemark(remark);

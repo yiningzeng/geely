@@ -28,7 +28,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
 
 
     @Override
-    public Object updateByDeviceCameraId(Integer deviceCameraId, Optional<Integer> restRoomId, Optional<String> ip,Optional<String> username,Optional<String> password, Optional<String> remark, Optional<Integer> status) throws MyException {
+    public Object updateByDeviceCameraId(Integer deviceCameraId, Optional<Integer> restRoomId, Optional<String> ip,Optional<String> username,Optional<String> password,Optional<String> remark, Optional<Integer> status) throws MyException {
         return R.callBackRet(deviceCameraDao.findById(deviceCameraId), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
@@ -38,6 +38,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                 ip.ifPresent(v->deviceCamera.setIp(v));
                 username.ifPresent(v->deviceCamera.setUsername(v));
                 password.ifPresent(v->deviceCamera.setPassword(v));
+//                rtsp.ifPresent(v->deviceCamera.setRtsp(v));
                 status.ifPresent(v->deviceCamera.setStatus(v));
                 remark.ifPresent(v->deviceCamera.setRemark(v));
                 if(deviceCameraDao.save(deviceCamera)!=null) return R.success();
