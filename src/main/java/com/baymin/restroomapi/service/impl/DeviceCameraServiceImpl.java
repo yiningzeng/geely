@@ -34,7 +34,8 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
     private String stopPush;
     @Value("${restroom.pixel}")
     private String pixel;
-
+    @Value("${restroom.pushwait}")
+    private Integer pushWait;
     @Override
     public Object updateByDeviceCameraId(Integer deviceCameraId, Optional<Integer> restRoomId, Optional<String> ip,Optional<String> username,Optional<String> password,Optional<String> remark, Optional<Integer> status) throws MyException {
         return R.callBackRet(deviceCameraDao.findById(deviceCameraId), new R.OptionalResult() {
@@ -106,7 +107,6 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                 if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
             }
         });
-
     }
 
 
@@ -121,7 +121,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                     StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
                     ShellKit.runShell(push + " " + cameraId + " " + deviceCamera.getRtsp()+" "+pixel, work);
                     while (work.isDoing()){
-                        Thread.sleep(5);
+                        Thread.sleep(pushWait*1000);
                     }
                     if(work.getRes().contains("film.m3u8")){
                         deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
@@ -146,7 +146,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
             StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
             ShellKit.runShell(stopPush + " " + cameraId, work);
             while (work.isDoing()){
-                Thread.sleep(5);
+                Thread.sleep(pushWait);
             }
             if(work.getRes().contains("success"))return R.success();
             return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
