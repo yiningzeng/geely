@@ -39,6 +39,8 @@ public class RestRoomController {
             @ApiImplicitParam(name = "ip", value = "ip", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "region", value = "所属行政区",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "address", value = "详细地址", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "longitude", value = "经度",required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "latitude", value = "纬度",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "cleaner", value = "责任保洁", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
@@ -48,11 +50,15 @@ public class RestRoomController {
                        @RequestParam(value = "ip",required = false) String ip,
                        @RequestParam(value = "region") String region,
                        @RequestParam(value = "address") String address,
+                       @RequestParam(value = "longitude") Float longitude,
+                       @RequestParam(value = "latitude") Float latitude,
                        @RequestParam(value = "cleaner",required = false) String cleaner,
                        @RequestParam(value = "remark",required = false) String remark,
                        @RequestParam(value = "status",defaultValue = "1") Integer status)throws MyException{
         RestRoom restRoom=new RestRoom();
         restRoom.setIp(ip);
+        restRoom.setLongitude(longitude);
+        restRoom.setLatitude(latitude);
         restRoom.setRestRoomName(name);
         restRoom.setRegion(region);
         restRoom.setAddress(address);
@@ -70,6 +76,8 @@ public class RestRoomController {
             @ApiImplicitParam(name = "ip", value = "ip", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "region", value = "所属行政区", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "address", value = "详细地址",dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "longitude", value = "经度",required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "latitude", value = "纬度",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "cleaner", value = "责任保洁", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}", dataType = "string", paramType = "query"),
@@ -80,11 +88,13 @@ public class RestRoomController {
                          @RequestParam(value = "ip",required = false) String ip,
                          @RequestParam(value = "region",required = false) String region,
                          @RequestParam(value = "address",required = false) String address,
+                         @RequestParam(value = "longitude") Float longitude,
+                         @RequestParam(value = "latitude") Float latitude,
                          @RequestParam(value = "cleaner",required = false) String cleaner,
                          @RequestParam(value = "remark",required = false) String remark,
                          @RequestParam(value = "status",required = false) Integer status)throws MyException{
 
-        return restRoomService.updateByRestRoomId(restRoomId,Optional.ofNullable(name),Optional.ofNullable(ip),Optional.ofNullable(region),Optional.ofNullable(address),Optional.ofNullable(cleaner),Optional.ofNullable(remark),Optional.ofNullable(status));
+        return restRoomService.updateByRestRoomId(restRoomId,Optional.ofNullable(name),Optional.ofNullable(ip),Optional.ofNullable(region),Optional.ofNullable(address),Optional.ofNullable(longitude),Optional.ofNullable(latitude),Optional.ofNullable(cleaner),Optional.ofNullable(remark),Optional.ofNullable(status));
     }
 
 

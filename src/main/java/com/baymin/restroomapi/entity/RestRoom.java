@@ -43,6 +43,10 @@ public class RestRoom implements Serializable {
     private String remark;
     @ApiModelProperty(value = "状态",example = "0：厕所关闭|1：厕所对外开放")
     private Integer status;
+    @ApiModelProperty(value = "经度",example = "经度")
+    private Float longitude;
+    @ApiModelProperty(value = "纬度",example = "纬度")
+    private Float latitude;
     //@Temporal(TemporalType.TIMESTAMP)
     @JsonIgnore
     private Date createTime = new Date();
