@@ -48,7 +48,7 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户类型{0：禁用|1：启用}", example = "1")
     private Integer userStatus;
     //@Temporal(TemporalType.TIMESTAMP)
-    @ApiModelProperty(value = "创建时间", example = "1")
+    @ApiModelProperty(value = "创建时间")
     private Date createTime = new Date();
     //@Embedded
     //@JsonBackReference

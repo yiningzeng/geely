@@ -41,7 +41,13 @@ public class DeviceGas implements Serializable {
 //    @ApiModelProperty(value = "客流量", example = "12")
 //    private String passengerFlow;
 
-    @ApiModelProperty(value = "{0：男厕|1：女厕}")
+    /**
+     *  <Radio value={0}>大厅</Radio>
+     *             <Radio value={1}>女厕</Radio>
+     *             <Radio value={2}>男厕</Radio>
+     *             <Radio value={3}>无障碍</Radio>
+     */
+    @ApiModelProperty(value = "{0：大厅|1：女厕|2：男厕|3：无障碍}")
     private Integer type;
 
     @ApiModelProperty(value = "空气检测类型{0：禁用|1：启用}", example = "1")

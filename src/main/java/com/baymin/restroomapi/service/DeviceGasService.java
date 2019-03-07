@@ -50,4 +50,5 @@ public interface DeviceGasService {
      */
     Object findAll(Integer restRoomId,Optional<Integer> status, Pageable pageable)throws MyException;
 
+    Object findAllGasList(Integer deviceId,Integer startTm,Integer endTm)throws MyException;
 }
