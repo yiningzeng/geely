@@ -17,7 +17,7 @@ public class GasInfo {
         private String df;
         private String ea;
         private String fa;
-        private String y;
+        private String zq;
     }
     @lombok.Data
     public class Data {
@@ -30,7 +30,8 @@ public class GasInfo {
             private Integer df;
             private Float ea;
             private Float fa;
-            private Float y;
+            private Float zq;
+            private Integer type;//表示那个位置的
             private String x;
             private List<Items> histroyList;
         }

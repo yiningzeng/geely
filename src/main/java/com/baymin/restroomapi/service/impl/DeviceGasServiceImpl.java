@@ -92,21 +92,27 @@ public class DeviceGasServiceImpl implements DeviceGasService {
         String res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/termdata/getDevTermList?deviceId="+deviceId);
 
         Gson gson=new Gson();
-        GasInfo gasInfo= gson.fromJson(res.replace("pickTm","x").replace("zq","y"), GasInfo.class);
+        GasInfo gasInfo= gson.fromJson(res.replace("pickTm","x"), GasInfo.class);
         for (int i=0;i<gasInfo.getData().getItems().size();i++){
-            String funcId=gasInfo.getData().getItems().get(i).getFuncId();
-            res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/datapick/historyList?deviceId="+deviceId+"&funcId="+funcId+"&mode=asc&startTm="+startTm+"&endTm="+endTm);
-            GasInfo temp=gson.fromJson(res.replace("pickTm","x").replace("zq","y"),GasInfo.class);
+            Integer funcId=Integer.parseInt(gasInfo.getData().getItems().get(i).getFuncId());
+            Optional<DeviceGas> aa=deviceGasDao.findFirstByGasDeviceId(funcId);
+            if(aa.isPresent()){
+                gasInfo.getData().getItems().get(i).setType(aa.get().getType());
+            }
+            else continue;
 
-            List<GasInfo.Data.Items> result = null;
-            result = temp.getData().getItems().stream()
-                    .filter(
-                            (GasInfo.Data.Items s) ->
-                                     s.getY()!=null && s.getY()>0
-                    )
-                    .collect(Collectors.toList());
+//            res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/datapick/historyList?deviceId="+deviceId+"&funcId="+funcId+"&mode=asc&startTm="+startTm+"&endTm="+endTm);
+//            GasInfo temp=gson.fromJson(res.replace("pickTm","x").replace("zq","y"),GasInfo.class);
+//
+//            List<GasInfo.Data.Items> result = null;
+//            result = temp.getData().getItems().stream()
+//                    .filter(
+//                            (GasInfo.Data.Items s) ->
+//                                     s.getY()!=null && s.getY()>0
+//                    )
+//                    .collect(Collectors.toList());
 
-            gasInfo.getData().getItems().get(i).setHistroyList(result);
+//            gasInfo.getData().getItems().get(i).setHistroyList(result);
         }
         return R.success(gasInfo);
     }
