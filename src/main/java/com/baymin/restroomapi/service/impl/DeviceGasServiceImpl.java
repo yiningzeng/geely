@@ -88,18 +88,21 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     }
 
     @Override
-    public Object findAllGasList(Integer deviceId, Integer startTm, Integer endTm) throws MyException {
-        String res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/termdata/getDevTermList?deviceId="+deviceId);
+    public Object findAllGasList(Integer restRoomId, Integer startTm, Integer endTm) throws MyException {
 
-        Gson gson=new Gson();
-        GasInfo gasInfo= gson.fromJson(res.replace("pickTm","x"), GasInfo.class);
-        for (int i=0;i<gasInfo.getData().getItems().size();i++){
-            Integer funcId=Integer.parseInt(gasInfo.getData().getItems().get(i).getFuncId());
-            Optional<DeviceGas> aa=deviceGasDao.findFirstByGasDeviceId(funcId);
-            if(aa.isPresent()){
-                gasInfo.getData().getItems().get(i).setType(aa.get().getType());
-            }
-            else continue;
+        Optional<DeviceGas> deviceGasOptional=deviceGasDao.findFirstByRestRoom_RestRoomId(restRoomId);
+        if(deviceGasOptional.isPresent()){
+            String res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/termdata/getDevTermList?deviceId="+deviceGasOptional.get().getGasDeviceParentId());
+
+            Gson gson=new Gson();
+            GasInfo gasInfo= gson.fromJson(res.replace("pickTm","x"), GasInfo.class);
+            for (int i=0;i<gasInfo.getData().getItems().size();i++){
+                Integer funcId=Integer.parseInt(gasInfo.getData().getItems().get(i).getFuncId());
+                Optional<DeviceGas> aa=deviceGasDao.findFirstByGasDeviceId(funcId);
+                if(aa.isPresent()){
+                    gasInfo.getData().getItems().get(i).setType(aa.get().getType());
+                }
+                else continue;
 
 //            res=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/datapick/historyList?deviceId="+deviceId+"&funcId="+funcId+"&mode=asc&startTm="+startTm+"&endTm="+endTm);
 //            GasInfo temp=gson.fromJson(res.replace("pickTm","x").replace("zq","y"),GasInfo.class);
@@ -113,7 +116,13 @@ public class DeviceGasServiceImpl implements DeviceGasService {
 //                    .collect(Collectors.toList());
 
 //            gasInfo.getData().getItems().get(i).setHistroyList(result);
+            }
+            return R.success(gasInfo);
         }
-        return R.success(gasInfo);
+        else{
+            return R.error(ResultEnum.NO_LIST);
+        }
+
+
     }
 }

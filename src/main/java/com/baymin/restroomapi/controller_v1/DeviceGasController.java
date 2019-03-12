@@ -93,19 +93,19 @@ public class DeviceGasController {
         return deviceGasService.findAll(restRoomId,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
-    @ApiOperation(value = "通过deviceId获取气体记录，就是一次获取这个厕所所有的记录", response = RestRoom.class)
+    @ApiOperation(value = "通过restRoomId获取气体记录，就是一次获取这个厕所所有的记录", response = RestRoom.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "deviceId", value = "摄像头id",required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "restRoomId", value = "公厕id",required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
     })
-    @GetMapping(value = "/gas/list/{deviceId}")
+    @GetMapping(value = "/gas/list/{restRoomId}")
     public Object getRestRoomListByPage(
-            @PathVariable(value = "deviceId") Integer deviceId,
-            @RequestParam(value = "startTm") Integer startTm,
-            @RequestParam(value = "endTm") Integer endTm) throws Exception {
-        return deviceGasService.findAllGasList(deviceId,startTm,endTm);
+            @PathVariable(value = "restRoomId") Integer restRoomId,
+            @RequestParam(value = "startTm", required = false) Integer startTm,
+            @RequestParam(value = "endTm", required = false) Integer endTm) throws Exception {
+        return deviceGasService.findAllGasList(restRoomId,startTm,endTm);
     }
 
 }
