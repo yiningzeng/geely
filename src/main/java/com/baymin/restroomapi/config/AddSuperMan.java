@@ -58,7 +58,7 @@ public class AddSuperMan {
         User user=new User();
         user.setUserStatus(1);
         user.setUsername("baymin");
-        user.setDepartment("厕所终结者");
+        user.setDepartment("厕所管理者");
         user.setLevel(level);
         user.setPassword(Utils.sha256("e10adc3949ba59abbe56e057f20f883e",salt+"-"+"baymin"));
         user.setRelName("超级管理员");

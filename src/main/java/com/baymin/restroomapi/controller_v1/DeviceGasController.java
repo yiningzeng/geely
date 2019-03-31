@@ -108,4 +108,19 @@ public class DeviceGasController {
         return deviceGasService.findAllGasList(restRoomId,startTm,endTm);
     }
 
+    @ApiOperation(value = "主页显示数据报表用，通过restRoomId获取气体记录，就是一次获取这个厕所所有的记录", response = RestRoom.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId", value = "公厕id",required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
+    })
+    @GetMapping(value = "/gas-home/list/{restRoomId}")
+    public Object getRestRoomHomeListByPage(
+            @PathVariable(value = "restRoomId") Integer restRoomId,
+            @RequestParam(value = "startTm", required = false) Integer startTm,
+            @RequestParam(value = "endTm", required = false) Integer endTm) throws Exception {
+        return deviceGasService.findAllGasListHome(restRoomId,startTm,endTm);
+    }
+
 }

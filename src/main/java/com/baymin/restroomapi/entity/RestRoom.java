@@ -51,6 +51,9 @@ public class RestRoom implements Serializable {
     @JsonIgnore
     private Date createTime = new Date();
 
+
+    private Date updateTime = new Date();
+
     @OneToMany(mappedBy = "restRoom",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
