@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import javax.servlet.MultipartConfigElement;
 @Configuration
 @EnableAdminServer
 @Slf4j
+@EnableCaching
 public class RestroomApiApplication {
 
     @Value("${server.port}")

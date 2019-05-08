@@ -50,6 +50,13 @@
             <version>4.7.0</version>
         </dependency>
 
+
+        <!-- 引入 redis 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!--日志自动注解-->
         <dependency>
             <groupId>org.projectlombok</groupId>
