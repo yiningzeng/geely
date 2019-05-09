@@ -33,11 +33,7 @@ spring:
     multipart:
       max-file-size: 20Mb
       max-request-size: 20Mb
-renren:
-  redis:
-    open: false  # 是否开启redis缓存  true开启   false关闭
-  shiro:
-    redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
+
 
 #解决跨域
 #kuayu-origin: http://japi.waterever.cn

@@ -12,6 +12,8 @@ import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.service.UserService;
 import com.baymin.restroomapi.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Service
+@CacheConfig(cacheNames = "users")
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserSpecs userSpecs;
