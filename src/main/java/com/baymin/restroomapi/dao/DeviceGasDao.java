@@ -19,6 +19,8 @@ public interface DeviceGasDao extends JpaRepository<DeviceGas, Integer>,JpaSpeci
 
     Optional<DeviceGas> findFirstByGasDeviceId(Integer gasDeviceId);
 
+    Optional<DeviceGas> findFirstByGasDeviceParentId(Integer gasDeviceParentId);
+
     Optional<DeviceGas> findFirstByRestRoom_RestRoomId(Integer restRoomId);
 
     Page<DeviceGas> findAllByRestRoom_RestRoomId(Integer restRoomId, Pageable pageable);

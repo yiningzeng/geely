@@ -129,8 +129,8 @@ public class RestRoomController {
                                     @RequestParam(value = "status", required = false) Integer status,
                                     @RequestParam(value = "size", defaultValue = "10") @Min(value = 1, message = "值不能小于1") Integer size,
                                     @RequestParam(value = "keyword",required = false) String keyword,
-                                    @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
-                                    @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
+                                    @RequestParam(value = "sortType", defaultValue = "asc") String sortType,
+                                    @RequestParam(value = "sortField", defaultValue = "restRoomId") String sortField
                                     ) throws Exception {
         Pageable pageable=PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField);
         if(Optional.ofNullable(keyword).isPresent()){

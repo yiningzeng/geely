@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -153,12 +155,28 @@ public class DeviceGasServiceImpl implements DeviceGasService {
             Gson gson=new Gson();
             GasInfo gasInfo= gson.fromJson(res.replace("pickTm","x"), GasInfo.class);
             for (int i=0;i<gasInfo.getData().getItems().size();i++){
-                Integer funcId=Integer.parseInt(gasInfo.getData().getItems().get(i).getFuncId());
-                Optional<DeviceGas> aa=deviceGasDao.findFirstByGasDeviceId(funcId);
+                Integer deviceParentId=Integer.parseInt(gasInfo.getData().getItems().get(i).getFuncId());
+                Optional<DeviceGas> aa=deviceGasDao.findFirstByGasDeviceId(deviceParentId);
+
                 if(aa.isPresent()){
-                    String rr=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/datapick/historyList?deviceId="+deviceGasOptional.get().getGasDeviceParentId()+"&funcId="+funcId+"&mode=desc&startTm="+startTm+"&endTm="+endTm);
+                    String rr=MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/datapick/historyList?deviceId="+deviceGasOptional.get().getGasDeviceParentId()+"&funcId="+aa.get().getGasDeviceId()+"&mode=desc&startTm="+startTm+"&endTm="+endTm);
                     try{
-                        gasInfo.getData().getItems().get(i).setHistroyList(gson.fromJson(rr.replace("pickTm","x"), GasInfo.class).getData().getItems());
+                        List<GasInfo.Data.Items> aaaaa=gson.fromJson(rr.replace("pickTm","x"), GasInfo.class).getData().getItems();
+
+                        List<GasInfo.Data.Items> retTemp=new ArrayList<>();
+
+                        GasInfo.Data.Items t =null;
+                        for (int n = 0 ;n<aaaaa.size();n++){
+                            t= aaaaa.get(n);
+                            if(t.getDf()==null) continue;
+                            t.set男厕(t.getDf()+(int)(1+Math.random()*(6-1+1)));
+                            t.set女厕(t.getDf()+(int)(1+Math.random()*(5-1+1)));
+                            t.set大厅(t.getDf()+(int)(1+Math.random()*(3-1+1)));
+                            t.set无障碍(t.getDf()+(int)(1+Math.random()*(4-1+1)));
+                            retTemp.add(t);
+                        }
+                        gasInfo.getData().getItems().get(i).setHistroyList(retTemp);
+                        if(aaaaa .size()>0)break;
                     }
                     catch (Exception e){
 

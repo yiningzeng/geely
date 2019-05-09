@@ -28,6 +28,10 @@ public class GasInfo {
             private String deviceId;
             private String funcId;
             private Integer df;
+            private Integer 大厅;
+            private Integer 男厕;
+            private Integer 女厕;
+            private Integer 无障碍;
             private Float ea;
             private Float fa;
             private Float zq;
