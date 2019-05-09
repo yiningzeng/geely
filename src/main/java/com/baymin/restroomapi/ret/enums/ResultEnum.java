@@ -29,6 +29,7 @@ public enum ResultEnum {
     FAIL_ALLREADY_HAVE_DEVICE(1015,"该设备已存在"),
     FAIL_DEVICE_ERR(1016,"请确认设备已正确添加"),
     FAIL_DEVICE_CAMERA_PUSHERR(1017,"直播失败，请重新打开"),
+    FAIL_DEVICE_CAMERA_PUSHERR_TIMEOUT(1018,"直播超时，请重新打开"),
 
     FAIL_INSERT_ERROR_ALLREADY_CARMODEL(1201,"已经存在该车型,更新操作失败"),
     FAIL_INSERT_ERROR_ALLREADY_RULE(1202,"已经存在的命名规则"),

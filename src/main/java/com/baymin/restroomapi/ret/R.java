@@ -54,7 +54,7 @@ public class R {
      * @return
      */
     public static Object callBackRet(Optional optional,OptionalResult optionalResult){
-        return optional.map(a->optionalResult.onTrue(a)).orElseGet(()->optionalResult.onFalse()).toString();
+        return optional.map(a->optionalResult.onTrue(a)).orElseGet(()->optionalResult.onFalse());
     }
     /**
      * 自定义带结果是否空值判断返回
@@ -90,12 +90,12 @@ public class R {
      * @param object
      * @return
      */
-    public static String success(Object object) {
+    public static Result success(Object object) {
         Result result = new Result();
         result.setCode(0);
         result.setMsg("成功");
         result.setData(object);
-        return new Gson().toJson(result);
+        return result;
     }
 
     /**
@@ -105,13 +105,14 @@ public class R {
      * @param object
      * @return
      */
-    public static String success(Object object, Integer status) {
+    public static Result success(Object object, Integer status) {
         Result result = new Result();
         result.setCode(0);
         result.setStatus(status);
         result.setMsg("成功");
         result.setData(object);
-        return new Gson().toJson(result);
+        return result;
+//        return new Gson().toJson(result);
     }
 
     /**
@@ -120,13 +121,14 @@ public class R {
      * @param resultEnum
      * @return
      */
-    public static String success(ResultEnum resultEnum, Object object) {
+    public static Result success(ResultEnum resultEnum, Object object) {
         Result result = new Result();
         result.setCode(0);
         result.setMsg(resultEnum.getMsg());
         result.setStatus(resultEnum.getCode());
         result.setData(object);
-        return new Gson().toJson(result);
+        return result;
+//        return new Gson().toJson(result);
     }
 
     /**
@@ -135,12 +137,13 @@ public class R {
      * @param
      * @return
      */
-    public static String success(ResultEnum resultEnum) {
+    public static ResultNoData success(ResultEnum resultEnum) {
         ResultNoData result = new ResultNoData();
         result.setStatus(resultEnum.getCode());
         result.setCode(0);
         result.setMsg(resultEnum.getMsg());
-        return new Gson().toJson(result);
+        return result;
+//        return new Gson().toJson(result);
     }
 
 
@@ -150,48 +153,50 @@ public class R {
      *
      * @return
      */
-    public static String success() {
+    public static Result success() {
         Result result = new Result();
         result.setCode(0);
         result.setMsg("成功");
-        return new Gson().toJson(result);
+        return result;
+//        return new Gson().toJson(result);
     }
 
     /**
      * @param resultEnum
      * @return
      */
-    public static String error(ResultEnum resultEnum, Object object) {
+    public static Result error(ResultEnum resultEnum, Object object) {
         Result result = new Result();
         result.setCode(-1);
         result.setMsg(resultEnum.getMsg());
         result.setStatus(resultEnum.getCode());
         result.setData(object);
-        return new Gson().toJson(result);
+        return result;
+//        return new Gson().toJson(result);
     }
 
     /**
      * @param resultEnum
      * @return
      */
-    public static String error(ResultEnum resultEnum) {
+    public static ResultNoData error(ResultEnum resultEnum) {
 
         ResultNoData result = new ResultNoData();
         result.setCode(-1);
         result.setStatus(resultEnum.getCode());
         result.setMsg(resultEnum.getMsg());
         log.info("~~~~~~~~~~~~~error~~~~~~~~~code:{}~msg:{}~~~~~~~~~~~~~~~~~~~~~",result.getStatus(),result.getMsg());
-        return new Gson().toJson(result);
+        return result;
     }
 
 
-    public static String error(Integer code, String msg) {
+    public static ResultNoData error(Integer code, String msg) {
         ResultNoData result = new ResultNoData();
         result.setCode(-1);
         result.setStatus(code);
         result.setMsg(msg);
         log.info("~~~~~~~~~~~~~error~~~~~~~~~code:{}~msg:{}~~~~~~~~~~~~~~~~~~~~~",result.getStatus(),result.getMsg());
-        return new Gson().toJson(result);
+        return result;
     }
 
 

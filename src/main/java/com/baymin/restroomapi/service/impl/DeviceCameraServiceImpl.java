@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Optional;
 
 @Slf4j
@@ -34,6 +35,8 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
     private String stopPush;
     @Value("${restroom.pixel}")
     private String pixel;
+    @Value("${restroom.push-file-path}")
+    private String streampath;
     @Value("${restroom.pushwait}")
     private Integer pushWait;
     @Override
@@ -120,15 +123,23 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                 try {
                     StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
                     ShellKit.runShell(push + " " + cameraId + " " + deviceCamera.getRtsp()+" "+pixel, work);
-                    while (work.isDoing()){
-                        Thread.sleep(pushWait*1000);
+                    File file = new File(streampath.replace("$1",cameraId+"/film.m3u8"));
+                    long now = System.currentTimeMillis();
+                    while (true){
+                        long nonow = System.currentTimeMillis();
+                        if(file.exists()){
+                            if(work.getRes().contains("film.m3u8")){
+                                deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
+                                deviceCameraDao.save(deviceCamera);
+                                return R.success(deviceCamera.getLiveUrl());
+                            }
+                        }
+                        else {
+                            if(((nonow - now)/1000 - pushWait)>0)return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR_TIMEOUT);
+                        }
+                        Thread.sleep(100);
                     }
-                    if(work.getRes().contains("film.m3u8")){
-                        deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
-                        deviceCameraDao.save(deviceCamera);
-                        return R.success(deviceCamera.getLiveUrl());
-                    }
-                    return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR);
+//                    return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR);
                 } catch (Exception e) {
                     return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
                 }

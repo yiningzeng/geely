@@ -47,6 +47,8 @@ public class RestRoom implements Serializable {
     private Float longitude;
     @ApiModelProperty(value = "纬度",example = "纬度")
     private Float latitude;
+    @ApiModelProperty(value = "人流术",example = "100")
+    private Integer peopleNum;
     //@Temporal(TemporalType.TIMESTAMP)
     @JsonIgnore
     private Date createTime = new Date();
