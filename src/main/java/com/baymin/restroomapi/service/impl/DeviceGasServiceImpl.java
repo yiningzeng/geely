@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-//@CacheConfig(cacheNames = "device_gas")
+@CacheConfig(cacheNames = "device_gas")
 public class DeviceGasServiceImpl implements DeviceGasService {
 
     @Autowired
@@ -72,6 +73,7 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     }
 
     @Override
+    @CacheEvict(value="deleteByDeviceGasId", key ="#p0")
     public Object deleteByDeviceGasId(Integer deviceGasId) throws MyException {
         return R.callBackRet(deviceGasDao.findFirstByGasDeviceId(deviceGasId), new R.OptionalResult() {
             @Override
@@ -88,16 +90,13 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     }
 
     @Override
+    @Cacheable(value="findAll", key ="#p0")
     public Object findAll(Integer restRoomId,Optional<Integer> status,Pageable pageable) throws MyException {
 //        redisUtils.set(restRoomId+"",);
-        Gson gson =new Gson();
-        Type type = new TypeToken<Page<DeviceGas>>(){}.getType();
-        Page<DeviceGas> pp = gson.fromJson(strRedis.opsForValue().get("gas_flow"), type);
         return R.callBackRet(status, new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
                 Page<DeviceGas> retPage= deviceGasDao.findAllByStatus((Integer)data,pageable);//userDao.findAll(example,pageable);
-                strRedis.opsForValue().set("gas_flow", gson.toJson(retPage), 1, TimeUnit.HOURS);
                 if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
             }
             @Override
@@ -113,14 +112,13 @@ public class DeviceGasServiceImpl implements DeviceGasService {
 //                        return o;
 //                    }
 //                }).create();
-
-                strRedis.opsForValue().set("gas_flow", gson.toJson(retPage), 1, TimeUnit.HOURS);
                 if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
             }
         });
     }
 
     @Override
+    @Cacheable(value="findAllGasList", key ="#p0")
     public Object findAllGasList(Integer restRoomId, Integer startTm, Integer endTm) throws MyException {
 
         Optional<DeviceGas> deviceGasOptional=deviceGasDao.findFirstByRestRoom_RestRoomId(restRoomId);
@@ -176,6 +174,7 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     }
 
     @Override
+    @Cacheable(value="findAllGasListHome", key ="#p0")
     public Object findAllGasListHome(Integer restRoomId, Integer startTm, Integer endTm) throws MyException {
 
         Optional<DeviceGas> deviceGasOptional=deviceGasDao.findFirstByRestRoom_RestRoomId(restRoomId);

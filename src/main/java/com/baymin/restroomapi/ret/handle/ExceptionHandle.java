@@ -30,7 +30,7 @@ public class ExceptionHandle {
 
     @ExceptionHandler(value = {MyException.class})
     @ResponseBody
-    public ResultNoData handle(MyException e) {
+    public String handle(MyException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
         if (e instanceof MyException) {
@@ -44,7 +44,7 @@ public class ExceptionHandle {
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResultNoData handle(Exception e) {
+    public String handle(Exception e) {
         e.printStackTrace();
         if (e instanceof MyException) {
             MyException myException = (MyException) e;

@@ -1,0 +1,89 @@
+#1.先配置nginx配置文件，已修改配置只需要在配置目录下新增文件就行了
+#2.nginx -s reload 载入配置文件
+#3.ffmpeg 推流
+# 命令:
+#ffmpeg -i "rtsp://119.39.49.116:554/ch00000090990000001079.sdp?vcdnid=001" -vcodec libx264 -vprofile baseline -acodec aac -ar 44100 -strict -2 -ac 1 -f flv -s 1280x720 -q 10 rtmp://localhost:2016/hls_alic/film
+#4.在apache的网站目录下生成的m3u8文件需要设置777权限才能直播
+# 命令:
+#chmod -R 777 /opt/lampp/htdocs/stream/
+restroom:
+  push: /opt/restroom/push.sh #$1=路径-传摄像头id #$2=rtsp地址 #$3=1280x720 清晰度
+  stoppush: /opt/restroom/stoppush.sh #$1=路径-传摄像头id
+  pixel: 1280x720
+  pushwait: 18 #单位秒
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  connector-port: 8082
+  port: 8080
+#  port: 8081
+#  port: 8082
+#  ssl:
+#    key-store: vip.p12 #执行的时候一定要把.p12证书放在同一个目录
+#    key-store-type: PKCS12
+#    key-store-password: baymin1024
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://192.168.0.109:8000/eureka/
+spring:
+  boot:
+    admin:
+      client:
+        instance:
+          service-base-url: "http://localhost:8080"
+  application:
+    name: restroom
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    druid:
+      url: jdbc:mysql://localhost:3306/restroom?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      username: baymin
+      password: baymin1024!@#$%
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+  security:
+    user:
+      name: baymin
+      password: baymin1024
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+
