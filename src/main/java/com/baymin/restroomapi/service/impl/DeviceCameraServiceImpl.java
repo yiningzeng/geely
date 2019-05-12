@@ -39,6 +39,9 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
     private String streampath;
     @Value("${restroom.pushwait}")
     private Integer pushWait;
+    @Value("${restroom.enable-stop-push}")
+    private Boolean enableStopPush;
+
     @Override
     public Object updateByDeviceCameraId(Integer deviceCameraId, Optional<Integer> restRoomId, Optional<String> ip,Optional<String> username,Optional<String> password,Optional<String> remark, Optional<Integer> status) throws MyException {
         return R.callBackRet(deviceCameraDao.findById(deviceCameraId), new R.OptionalResult() {
@@ -121,18 +124,27 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                 DeviceCamera deviceCamera = (DeviceCamera) data;
                 if (deviceCamera.getRtsp() == null) return R.error(ResultEnum.FAIL_DEVICE_ERR);
                 try {
+                    File file;
+                    if(!enableStopPush){
+                        file = new File(streampath.replace("$1",cameraId+"/film.m3u8"));
+                        if(file.exists()) {
+                            deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
+                            deviceCameraDao.save(deviceCamera);
+                            return R.success(deviceCamera.getLiveUrl());
+                        }
+                    }
+
                     StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
                     ShellKit.runShell(push + " " + cameraId + " " + deviceCamera.getRtsp()+" "+pixel, work);
-                    File file = new File(streampath.replace("$1",cameraId+"/film.m3u8"));
+                    file = new File(streampath.replace("$1",cameraId+"/film.m3u8"));
+
                     long now = System.currentTimeMillis();
                     while (true){
                         long nonow = System.currentTimeMillis();
                         if(file.exists()){
-                            if(work.getRes().contains("film.m3u8")){
-                                deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
-                                deviceCameraDao.save(deviceCamera);
-                                return R.success(deviceCamera.getLiveUrl());
-                            }
+                            deviceCamera.setLiveUrl("http://47.99.207.5:88/stream/hls_"+cameraId+"/film.m3u8");
+                            deviceCameraDao.save(deviceCamera);
+                            return R.success(deviceCamera.getLiveUrl());
                         }
                         else {
                             if(((nonow - now)/1000 - pushWait)>0)return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR_TIMEOUT);
@@ -141,6 +153,7 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
                     }
 //                    return R.error(ResultEnum.FAIL_DEVICE_CAMERA_PUSHERR);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
                 }
             }
@@ -153,16 +166,20 @@ public class DeviceCameraServiceImpl implements DeviceCameraService {
 
     @Override
     public Object stop(Integer cameraId) throws MyException {
-        try {
-            StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
-            ShellKit.runShell(stopPush + " " + cameraId, work);
-            while (work.isDoing()){
-                Thread.sleep(pushWait);
+        if (enableStopPush){
+            try {
+                StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
+                ShellKit.runShell(stopPush + " " + cameraId, work);
+                while (work.isDoing()){
+                    Thread.sleep(pushWait);
+                }
+                if(work.getRes().contains("success"))return R.success();
+                return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
+            } catch (Exception e) {
+                return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
             }
-            if(work.getRes().contains("success"))return R.success();
-            return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
-        } catch (Exception e) {
-            return R.error(ResultEnum.FAIL_ACTION_MESSAGE);
         }
+        else return R.success();
+
     }
 }
