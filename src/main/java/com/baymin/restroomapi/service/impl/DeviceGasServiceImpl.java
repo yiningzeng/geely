@@ -202,16 +202,28 @@ public class DeviceGasServiceImpl implements DeviceGasService {
                         List<GasInfo.Data.Items> retTemp=new ArrayList<>();
 
                         GasInfo.Data.Items t =null;
+                        int sum=0;
+                        int num=0;
                         for (int n = 0 ;n<aaaaa.size();n++){
                             t= aaaaa.get(n);
                             if(t.getDf()==null) continue;
-                            t.set男厕(t.getDf()+(int)(1+Math.random()*(6-1+1)));
-                            t.set女厕(t.getDf()+(int)(1+Math.random()*(5-1+1)));
-                            t.set大厅(t.getDf()+(int)(1+Math.random()*(3-1+1)));
-                            t.set无障碍(t.getDf()+(int)(1+Math.random()*(4-1+1)));
                             retTemp.add(t);
+                            sum+=t.getDf();
+                            num++;
                         }
-                        gasInfo.getData().getItems().get(i).setHistroyList(retTemp);
+                        int avg =sum/num;
+                        List<GasInfo.Data.Items> retTemp2=new ArrayList<>();
+                        for (int n = 0 ;n<retTemp.size();n++){
+                            t= retTemp.get(n);
+                            int numres= t.getDf()-avg+1;
+                            if(numres < 0) numres=0;
+                            t.set客流(numres);
+//                            t.set女厕(t.getZq()+(float)(0.2+Math.random()*(1-0.2+0.2)));
+//                            t.set大厅(t.getZq()+(float)(0.1+Math.random()*(1-0.1+0.1)));
+//                            t.set无障碍(t.getZq()+(float)(0.3+Math.random()*(1-0.3+0.3)));
+                            retTemp2.add(t);
+                        }
+                        gasInfo.getData().getItems().get(i).setHistroyList(retTemp2);
                         if(aaaaa .size()>0)break;
                     }
                     catch (Exception e){
