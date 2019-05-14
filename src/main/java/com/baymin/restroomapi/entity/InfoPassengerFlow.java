@@ -22,6 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel(value = "InfoPassengerFlow:客流统计类")
 public class InfoPassengerFlow implements Serializable {
+
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,7 @@ public class InfoPassengerFlow implements Serializable {
 
     @ApiModelProperty(value = "人流总数",example = "1111")
     private Integer number;
+
     @ApiModelProperty(value = "更新时间")
     private Date updateTime = new Date();
     private Date createTime = new Date();
