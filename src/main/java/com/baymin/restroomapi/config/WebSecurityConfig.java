@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //endregion
 
         web.ignoring().antMatchers("/api/**");
-        web.ignoring().antMatchers("/test/**");
+        web.ignoring().antMatchers("/fuck-flow/**");
         web.ignoring().antMatchers("/login");
         web.ignoring().antMatchers("/ip");
         web.ignoring().antMatchers("/**.html", "/**.css", "/img/**", "/**.js", "/third-party/**");

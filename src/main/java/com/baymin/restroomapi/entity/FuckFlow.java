@@ -17,7 +17,7 @@ public class FuckFlow {
     private String ipAddress;
 
     @XmlElement(name = "PeopleCounting")
-    private Object PeopleCounting;
+    private PeopleCounting peopleCounting;
 
     @XmlRootElement(name="PeopleCounting")
     @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
@@ -26,6 +26,10 @@ public class FuckFlow {
     @NoArgsConstructor
     public class PeopleCounting{
         @XmlAttribute
-        private String enter;
+        private Integer enter;
+        @XmlAttribute
+        private Integer exit;
+        @XmlAttribute
+        private Integer pass;
     }
 }

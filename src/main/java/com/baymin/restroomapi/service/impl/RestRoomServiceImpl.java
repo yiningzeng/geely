@@ -1,11 +1,10 @@
 package com.baymin.restroomapi.service.impl;
 
 import com.baymin.restroomapi.config.aspect.jwt.TokenUtils;
+import com.baymin.restroomapi.dao.InfoPassengerFlowDao;
 import com.baymin.restroomapi.dao.RestRoomDao;
 import com.baymin.restroomapi.dao.specs.RestRoomSpecs;
-import com.baymin.restroomapi.entity.Level;
-import com.baymin.restroomapi.entity.RestRoom;
-import com.baymin.restroomapi.entity.User;
+import com.baymin.restroomapi.entity.*;
 import com.baymin.restroomapi.ret.R;
 import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -26,6 +26,9 @@ public class RestRoomServiceImpl implements RestRoomService {
     private RestRoomSpecs restRoomSpecs;
     @Autowired
     private RestRoomDao restRoomDao;
+
+    @Autowired
+    private InfoPassengerFlowDao iPFlowDao;
 
 
     @Override
@@ -105,4 +108,42 @@ public class RestRoomServiceImpl implements RestRoomService {
         });
 
     }
+
+    @Override
+    public Object fuckFlow(FuckFlow fuckFlow) throws MyException {
+        return R.callBackRet(restRoomDao.findFirstByIp(fuckFlow.getIpAddress()), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                Integer oldNum=0;
+                RestRoom restRoom = (RestRoom)data;
+                oldNum = restRoom.getPeopleNum();
+                restRoom.setPeopleNum(fuckFlow.getPeopleCounting().getEnter());
+
+
+                if(Utils.isYeaterday(restRoom.getUpdateTime(),null) == -1){ //表示是同一天
+                    InfoPassengerFlow infoPassengerFlow=new InfoPassengerFlow();
+                    infoPassengerFlow.setIp(fuckFlow.getIpAddress());
+                    infoPassengerFlow.setRestRoom(restRoom);
+                    infoPassengerFlow.setNumber(restRoom.getPeopleNum()-oldNum);
+                    iPFlowDao.save(infoPassengerFlow);
+                }
+
+                restRoom.setUpdateTime(new Date());
+                restRoomDao.save(restRoom);
+                return R.success();
+            }
+
+            @Override
+            public Object onFalse() {
+              return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
+            }
+        });
+    }
+
+    @Override
+    public Object getFuckFlow(Integer restRoomId, String startTime, String endTime) throws MyException {
+        return R.success(iPFlowDao.findAll(restRoomId,startTime,endTime));
+    }
+
+
 }

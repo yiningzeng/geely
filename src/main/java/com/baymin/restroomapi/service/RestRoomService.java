@@ -1,6 +1,7 @@
 package com.baymin.restroomapi.service;
 
 import com.baymin.restroomapi.dao.specs.RestRoomSpecs;
+import com.baymin.restroomapi.entity.FuckFlow;
 import com.baymin.restroomapi.entity.RestRoom;
 import com.baymin.restroomapi.ret.exception.MyException;
 import org.springframework.data.domain.Pageable;
@@ -53,4 +54,18 @@ public interface RestRoomService {
      */
     Object findAll(RestRoom specs, Pageable pageable)throws MyException;
 
+
+    /**
+     * 公厕人流数据实时上传
+     * @return
+     * @throws MyException
+     */
+    Object fuckFlow(FuckFlow fuckFlow)throws MyException;
+
+    /**
+     * 获取公厕人流数据
+     * @return
+     * @throws MyException
+     */
+    Object getFuckFlow(Integer restRoomId, String startTime, String endTime)throws MyException;
 }

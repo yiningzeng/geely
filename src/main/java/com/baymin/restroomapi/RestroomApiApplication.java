@@ -2,6 +2,7 @@ package com.baymin.restroomapi;
 
 import com.baymin.restroomapi.dao.UserDao;
 import com.baymin.restroomapi.entity.FuckFlow;
+import com.baymin.restroomapi.service.RestRoomService;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -13,6 +14,7 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,18 +37,19 @@ public class RestroomApiApplication {
 
     @Value("${server.port}")
     private String port;
-
+    @Autowired
+    private RestRoomService restRoomService;
 
 
     public static void main(String[] args) {
 
         SpringApplication.run(RestroomApiApplication.class, args);
     }
-    @PostMapping("/test")
+    @PostMapping(value = "/api/fuck-flow", consumes = { MediaType.APPLICATION_XML_VALUE }, produces = MediaType.APPLICATION_XML_VALUE)
     public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
 
         log.info("==============end==============={}",fuckFlow.toString());
-        return port;
+        return restRoomService.fuckFlow(fuckFlow);
     }
 
     @ResponseBody

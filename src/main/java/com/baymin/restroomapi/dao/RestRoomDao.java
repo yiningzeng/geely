@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface RestRoomDao extends JpaRepository<RestRoom, Integer>,JpaSpecificationExecutor<RestRoom> {
 
     Optional<RestRoom> findFirstByRestRoomNameAndRegion(String restRoomName,String region);
+
+    Optional<RestRoom> findFirstByIp(String ip);
+
 }
