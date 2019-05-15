@@ -124,7 +124,10 @@ public class RestRoomServiceImpl implements RestRoomService {
                     InfoPassengerFlow infoPassengerFlow=new InfoPassengerFlow();
                     infoPassengerFlow.setIp(fuckFlow.getIpAddress());
                     infoPassengerFlow.setRestRoom(restRoom);
-                    infoPassengerFlow.setNumber(restRoom.getPeopleNum()-oldNum);
+
+                    Integer num= restRoom.getPeopleNum()-oldNum;
+                    if(num<0) num=0;
+                    infoPassengerFlow.setNumber(num);
                     iPFlowDao.save(infoPassengerFlow);
                 }
 
