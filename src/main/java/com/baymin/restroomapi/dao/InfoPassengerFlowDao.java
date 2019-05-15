@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface InfoPassengerFlowDao extends JpaRepository<InfoPassengerFlow, Integer>,JpaSpecificationExecutor<InfoPassengerFlow> {
 
-    @Query(name = "查询所有数据",value = "select number, DATE_FORMAT(update_time,'%m-%d %H:%i') as 'show_time' from info_passenger_flow info where info.rest_room_id=?1 and info.update_time between ?2 and ?3 order by show_time asc", nativeQuery = true)
+    @Query(name = "查询所有数据",value = "select number, DATE_FORMAT(update_time,'%H:%i') as 'show_time' from info_passenger_flow info where info.rest_room_id=?1 and info.update_time between ?2 and ?3 order by show_time asc", nativeQuery = true)
     List<Map<String, Object>> findAll(Integer restRoomId, String startTime, String endTime);
 
     @Query(name = "查询所有数据show days",value = "SELECT DATE_FORMAT(update_time,'%Y-%m-%d') show_time, sum(number) number from info_passenger_flow where rest_room_id=?1 and update_time between ?2 and ?3 group by show_time order by show_time asc", nativeQuery = true)
