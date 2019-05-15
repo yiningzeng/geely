@@ -129,6 +129,8 @@ public class RestRoomServiceImpl implements RestRoomService {
                     if(num<0) num=0;
                     infoPassengerFlow.setNumber(num);
                     iPFlowDao.save(infoPassengerFlow);
+
+                    restRoom.setPeopleNum(oldNum+num);
                 }
 
                 restRoom.setUpdateTime(new Date());
