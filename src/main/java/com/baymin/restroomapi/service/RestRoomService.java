@@ -67,5 +67,5 @@ public interface RestRoomService {
      * @return
      * @throws MyException
      */
-    Object getFuckFlow(Integer restRoomId, String startTime, String endTime)throws MyException;
+    Object getFuckFlow(Integer restRoomId, Integer type, String startTime, String endTime)throws MyException;
 }

@@ -146,8 +146,10 @@ public class RestRoomServiceImpl implements RestRoomService {
     }
 
     @Override
-    public Object getFuckFlow(Integer restRoomId, String startTime, String endTime) throws MyException {
-        return R.success(iPFlowDao.findAll(restRoomId,startTime,endTime));
+    public Object getFuckFlow(Integer restRoomId, Integer type, String startTime, String endTime) throws MyException {
+        if(type==0) return R.success(iPFlowDao.findAll(restRoomId,startTime,endTime));
+        else if(type==1) return R.success(iPFlowDao.findAllOnlyShowDays(restRoomId,startTime,endTime));
+        return R.success(iPFlowDao.findAllOnlyShowDays(restRoomId,startTime,endTime));
     }
 
 

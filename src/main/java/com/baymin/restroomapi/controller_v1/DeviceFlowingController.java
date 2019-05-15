@@ -39,13 +39,15 @@ public class DeviceFlowingController {
             @ApiImplicitParam(name = "restRoomId", value = "公厕id",required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "type", defaultValue = "0", value = "查询类型{默认0:显示所有的数据，1：统计按一天的时间来 也就是把一天所有数据总和}", dataType = "string", paramType = "query"),
     })
     @GetMapping(value = "/list/{restRoomId}")
     public Object getRestRoomHomeListByPage(
             @PathVariable(value = "restRoomId") Integer restRoomId,
             @RequestParam(value = "startTm") String startTm,
-            @RequestParam(value = "endTm") String endTm) throws Exception {
-        return restRoomService.getFuckFlow(restRoomId,startTm,endTm);
+            @RequestParam(value = "endTm") String endTm,
+            @RequestParam(value = "type", defaultValue = "0") Integer type) throws Exception {
+        return restRoomService.getFuckFlow(restRoomId,type,startTm,endTm);
     }
 
 //    /**
