@@ -85,4 +85,17 @@ public class ScheduledTaskService {
             //endregion
         }
     }
+
+    @Scheduled(cron = "0 0/30 * * * ? ")//
+    public void mysqlBackup(){
+        log.info("数据库备份 "+new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date())+"执行");
+        StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
+        try {
+            ShellKit.runShell("/opt/lampp/bin/mysqldump -u root restroom --result-file=\"/baymin/mysql-restroom-bak/"+new SimpleDateFormat("yyyy-MM-dd").format(new Date())+".sql\" ", work);
+//            long now = System.currentTimeMillis();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
