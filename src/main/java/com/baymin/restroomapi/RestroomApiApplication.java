@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ import javax.servlet.MultipartConfigElement;
 @EnableAdminServer
 @Slf4j
 @EnableCaching
+@EnableScheduling
 public class RestroomApiApplication {
 
     @Value("${server.port}")

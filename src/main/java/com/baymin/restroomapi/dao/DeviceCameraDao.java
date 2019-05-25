@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 /**
  * Created by baymin on 17-8-7.
  */
@@ -15,4 +17,6 @@ public interface DeviceCameraDao extends JpaRepository<DeviceCamera, Integer>,Jp
     Page<DeviceCamera> findAllByStatus(Integer status,Pageable pageable);
 
     Page<DeviceCamera> findAllByRestRoom_RestRoomId(Integer restRoomId,Pageable pageable);
+
+    List<DeviceCamera> findAllByRestRoom_RestRoomId(Integer restRoomId);
 }

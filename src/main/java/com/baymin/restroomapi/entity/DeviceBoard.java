@@ -36,6 +36,10 @@ public class DeviceBoard implements Serializable {
 
     @ApiModelProperty(value = "公告屏类型{0：禁用|1：启用}", example = "1")
     private Integer status=1;
+
+    @ApiModelProperty(value = "在线状态{0：离线|1：在线}")
+    private Integer online=0;
+
     //@Temporal(TemporalType.TIMESTAMP)
     @ApiModelProperty(value = "创建时间", example = "1")
     private Date createTime = new Date();
