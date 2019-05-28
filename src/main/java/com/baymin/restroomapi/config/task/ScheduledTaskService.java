@@ -48,7 +48,7 @@ public class ScheduledTaskService {
     Integer checkIsOnline(String ip){
         StreamGobblerCallback.Work work = new StreamGobblerCallback.Work();
         try {
-            ShellKit.runShell("ping -w 1 "+ip, work);
+            ShellKit.runShell("ping -w 5 "+ip, work);
 //            long now = System.currentTimeMillis();
             while (work.isDoing()){
                 Thread.sleep(100);
