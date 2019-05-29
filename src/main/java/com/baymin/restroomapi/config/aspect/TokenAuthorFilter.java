@@ -85,6 +85,7 @@ public class TokenAuthorFilter implements Filter {
                 uri.contains("/api/app/v1/work-post")||
                 uri.contains("/api/app/v1/login")||
                 uri.contains("fuck-flow")||
+                uri.contains("hi-give-me-five")||
                 uri.contains("/api/app/v1/password")||
                 uri.contains("/api/v1/fuck-flow/update")||
                 uri.contains("/api/app/v1/select")){

@@ -4,6 +4,7 @@ import com.baymin.restroomapi.entity.DeviceCamera;
 import com.baymin.restroomapi.entity.RestRoom;
 import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.service.DeviceCameraService;
+import com.baymin.restroomapi.utils.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.util.Optional;
 
@@ -112,5 +115,11 @@ public class DeviceBoardController {
         return deviceCameraService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
+
+    @ApiOperation(value="公告屏主动请求获取公厕的信息by it's ip")
+    @GetMapping(value = "/hi-give-me-five")
+    public Object getMeFive(HttpServletRequest request) throws MyException {
+        return Utils.getIpAddr(request);
+    }
 
 }
