@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.6.5-RELEASE</version>
+    <version>v1.6.6-RELEASE</version>
     <packaging>jar</packaging>
     <name>接口</name>
     <description>
         $更新说明
+        $修复天气接口失效问题，改用中国天气网接口
         $新增公告屏加载web，主动获取公厕信息接口
         $新增主动区分请求的公厕公告屏，通过主动获取客户端ip
     </description>
