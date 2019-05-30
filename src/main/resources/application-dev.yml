@@ -10,7 +10,10 @@ restroom:
   push: /opt/restroom/push.sh #$1=路径-传摄像头id #$2=rtsp地址 #$3=1280x720 清晰度
   stoppush: /opt/restroom/stoppush.sh #$1=路径-传摄像头id
   pixel: 1280x720
-  pushwait: 18 #单位秒
+  pushwait: 30 #单位秒 超时时间
+  push-file-path: /opt/lampp/htdocs/stream/hls_$1 #直播流保存的文件路径$1表示摄像头id
+  enable-stop-push: true
+  weather-url: http://www.nmc.cn/f/rest/real/58562
 management:
   endpoints:
     web:

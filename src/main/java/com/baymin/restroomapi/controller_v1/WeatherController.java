@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,6 +26,10 @@ import java.util.Optional;
 @Validated
 @Api(description = "天气done")
 public class WeatherController {
+
+    @Value("${restroom.weather-url}")
+    private String weatherUrl;
+
     /**
      * 天气
      * @return
@@ -34,6 +39,6 @@ public class WeatherController {
     @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header")
     @GetMapping(value = "/weather")
     public Object getWeather() throws Exception {
-        return MyOkHttpClient.getInstance().get("http://t.weather.sojson.com/api/weather/city/101210401");
+        return MyOkHttpClient.getInstance().get(weatherUrl);
     }
 }
