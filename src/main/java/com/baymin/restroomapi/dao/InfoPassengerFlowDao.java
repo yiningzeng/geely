@@ -15,6 +15,8 @@ public interface InfoPassengerFlowDao extends JpaRepository<InfoPassengerFlow, I
 
     @Query(name = "查询总人数",value = "select sum(number) from info_passenger_flow info where info.rest_room_id=?1 and info.update_time between ?2 and ?3", nativeQuery = true)
     Integer findAllSumNumber(Integer restRoomId, String startTime, String endTime);
+    @Query(name = "查询总人数",value = "select sum(number) from info_passenger_flow info where info.rest_room_id=?1", nativeQuery = true)
+    Integer findAllSumNumberNoTime(Integer restRoomId);
 
     @Query(name = "查询所有数据",value = "select number, DATE_FORMAT(update_time,'%H:%i') as 'show_time' from info_passenger_flow info where info.rest_room_id=?1 and info.update_time between ?2 and ?3 order by show_time asc", nativeQuery = true)
     List<Map<String, Object>> findAll(Integer restRoomId, String startTime, String endTime);

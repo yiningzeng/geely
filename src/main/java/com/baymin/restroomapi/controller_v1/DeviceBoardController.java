@@ -1,8 +1,10 @@
 package com.baymin.restroomapi.controller_v1;
 
+import com.baymin.restroomapi.entity.DeviceBoard;
 import com.baymin.restroomapi.entity.DeviceCamera;
 import com.baymin.restroomapi.entity.RestRoom;
 import com.baymin.restroomapi.ret.exception.MyException;
+import com.baymin.restroomapi.service.DeviceBoardService;
 import com.baymin.restroomapi.service.DeviceCameraService;
 import com.baymin.restroomapi.utils.Utils;
 import io.swagger.annotations.Api;
@@ -29,65 +31,50 @@ import java.util.Optional;
 public class DeviceBoardController {
 
     @Autowired
-    private DeviceCameraService deviceCameraService;
+    private DeviceBoardService deviceBoardService;
 
     @ApiOperation(value="新增公告屏")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "restRoomId", value = "厕所编号",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "ip", value = "公厕ip可带端口", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "username", value = "设备的username", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "设备的password", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
     })
     @PostMapping("/board")
     public Object save(@RequestParam(value = "restRoomId") Integer restRoomId,
                        @RequestParam(value = "ip") String ip,
-                       @RequestParam(value = "username") String username,
-                       @RequestParam(value = "password") String password,
-                       @RequestParam(value = "remark",required = false) String remark,
                        @RequestParam(value = "status",defaultValue = "1") Integer status)throws MyException{
-        DeviceCamera deviceCamera=new DeviceCamera();
-        deviceCamera.setIp(ip);
-        deviceCamera.setUsername(username);
-        deviceCamera.setPassword(password);
-        deviceCamera.setRemark(remark);
-        deviceCamera.setStatus(status);
-        return deviceCameraService.save(restRoomId,deviceCamera);
+        DeviceBoard deviceBoard=new DeviceBoard();
+        deviceBoard.setIp(ip);
+        deviceBoard.setStatus(status);
+        return deviceBoardService.save(restRoomId,deviceBoard);
     }
 
     @ApiOperation(value="编辑公告屏")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "cameraId", value = "摄像头id",required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "boardId", value = "摄像头id",required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "restRoomId", value = "厕所编号", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "ip", value = "公厕ip可带端口", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "username", value = "设备的username", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "设备的password", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "remark", value = "备注", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}", dataType = "string", paramType = "query"),
     })
     @PatchMapping("/board/{boardId}")
-    public Object update(@PathVariable(value = "boardId") Integer cameraId,
+    public Object update(@PathVariable(value = "boardId") Integer boardId,
                          @RequestParam(value = "restRoomId",required = false) Integer restRoomId,
                          @RequestParam(value = "ip",required = false) String ip,
-                         @RequestParam(value = "username") String username,
-                         @RequestParam(value = "password") String password,
-                         @RequestParam(value = "remark",required = false) String remark,
                          @RequestParam(value = "status",required = false) Integer status)throws MyException{
-        return deviceCameraService.updateByDeviceCameraId(cameraId,Optional.ofNullable(restRoomId),Optional.ofNullable(ip),Optional.ofNullable(username),Optional.ofNullable(password),Optional.ofNullable(remark),Optional.ofNullable(status));
+        return deviceBoardService.updateByDeviceBoardId(boardId,Optional.ofNullable(restRoomId),Optional.ofNullable(ip),Optional.ofNullable(status));
     }
 
 
-    @ApiOperation(value="删除摄像头")
+    @ApiOperation(value="删除公告屏")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "cameraId",value = "cameraId", required = true, dataType = "string",paramType = "path"),
+            @ApiImplicitParam(name = "boardId",value = "boardId", required = true, dataType = "string",paramType = "path"),
     })
     @DeleteMapping(value = "/board/{boardId}")
-    public Object deleteRestRoom(@PathVariable("boardId") Integer cameraId)throws MyException{
-        return deviceCameraService.deleteByDeviceCameraId(cameraId);
+    public Object deleteRestRoom(@PathVariable("boardId") Integer boardId)throws MyException{
+        return deviceBoardService.deleteByDeviceBoardId(boardId);
     }
 
     /**
@@ -96,7 +83,7 @@ public class DeviceBoardController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "获取摄像头列表[分页]", response = RestRoom.class)
+    @ApiOperation(value = "获取公告屏列表[分页]", response = RestRoom.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "status", value = "状态", dataType = "string", paramType = "query"),
@@ -112,14 +99,14 @@ public class DeviceBoardController {
                                     @RequestParam(value = "sortType", defaultValue = "desc") String sortType,
                                     @RequestParam(value = "sortField", defaultValue = "createTime") String sortField
                                     ) throws Exception {
-        return deviceCameraService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
+        return deviceBoardService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
 
     @ApiOperation(value="公告屏主动请求获取公厕的信息by it's ip")
     @GetMapping(value = "/hi-give-me-five")
     public Object getMeFive(HttpServletRequest request) throws MyException {
-        return Utils.getIpAddr(request);
+        return deviceBoardService.giveMeFive(request);
     }
 
 }
