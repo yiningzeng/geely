@@ -141,10 +141,9 @@ public class RestRoomServiceImpl implements RestRoomService {
                         infoPassengerFlow.setUpdateTime(new Date());
                         //endregion
                         iPFlowDao.save(infoPassengerFlow);
+                        restRoom.setPeopleNum(oldNum+num);
                     }
-                    restRoom.setPeopleNum(oldNum+num);
                 }
-
                 restRoom.setUpdateTime(new Date());
                 restRoomDao.save(restRoom);
                 return R.success();
