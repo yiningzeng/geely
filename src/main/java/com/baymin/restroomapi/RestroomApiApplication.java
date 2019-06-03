@@ -4,6 +4,8 @@ import com.baymin.restroomapi.dao.UserDao;
 import com.baymin.restroomapi.entity.FuckFlow;
 import com.baymin.restroomapi.service.RestRoomService;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +56,15 @@ public class RestroomApiApplication {
         log.info("==============end==============={}",fuckFlow.toString());
         return restRoomService.fuckFlow(fuckFlow);
     }
-    @PostMapping(value = "/api/fuck-flow/test")
-    public Object post() throws Exception {
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "num", value = "客流",required = true, dataType = "string", paramType = "path"),
+    })
+    @PostMapping(value = "/api/fuck-flow/test/{num}")
+    public Object post(@PathVariable(value = "num") Integer num) throws Exception {
         FuckFlow fuckFlow=new FuckFlow();
         fuckFlow.setIpAddress("192.168.10.4");
-        fuckFlow.setPeopleCounting(new FuckFlow.PeopleCounting(new Date().getSeconds(),0,0));
+        fuckFlow.setPeopleCounting(new FuckFlow.PeopleCounting(num,0,0));
         log.info("==============end==============={}",fuckFlow.toString());
         return restRoomService.fuckFlow(fuckFlow);
     }
