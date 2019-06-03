@@ -35,7 +35,7 @@ public class InfoPassengerFlow implements Serializable {
     private String ip;
 
     @ApiModelProperty(value = "人流总数",example = "1111")
-    private Integer number;
+    private Integer number=0;
 
     @ApiModelProperty(value = "更新时间")
     private Date updateTime = new Date();

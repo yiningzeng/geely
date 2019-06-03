@@ -24,7 +24,7 @@ public class FuckFlow {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class PeopleCounting{
+    public static class PeopleCounting{
         @XmlAttribute
         private Integer enter;
         @XmlAttribute

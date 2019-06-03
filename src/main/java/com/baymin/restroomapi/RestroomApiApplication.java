@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.MultipartConfigElement;
+import java.util.Date;
 
 /**
  * jpa属性详解
@@ -50,6 +51,14 @@ public class RestroomApiApplication {
     @PostMapping(value = "/api/fuck-flow", consumes = { MediaType.APPLICATION_XML_VALUE }, produces = MediaType.APPLICATION_XML_VALUE)
     public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
 
+        log.info("==============end==============={}",fuckFlow.toString());
+        return restRoomService.fuckFlow(fuckFlow);
+    }
+    @PostMapping(value = "/api/fuck-flow/test")
+    public Object post() throws Exception {
+        FuckFlow fuckFlow=new FuckFlow();
+        fuckFlow.setIpAddress("192.168.10.4");
+        fuckFlow.setPeopleCounting(new FuckFlow.PeopleCounting(new Date().getSeconds(),0,0));
         log.info("==============end==============={}",fuckFlow.toString());
         return restRoomService.fuckFlow(fuckFlow);
     }

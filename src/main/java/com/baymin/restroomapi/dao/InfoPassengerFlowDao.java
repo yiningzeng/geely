@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by baymin on 17-8-7.
@@ -24,4 +25,6 @@ public interface InfoPassengerFlowDao extends JpaRepository<InfoPassengerFlow, I
 
     @Query(name = "查询所有数据show days",value = "SELECT DATE_FORMAT(update_time,'%Y-%m-%d') show_time, sum(number) number from info_passenger_flow where rest_room_id=?1 and update_time between ?2 and ?3 group by show_time order by show_time asc", nativeQuery = true)
     List<Map<String, Object>> findAllOnlyShowDays(Integer restRoomId, String startTime, String endTime);
+
+    Optional<InfoPassengerFlow> findFirstByRestRoom_RestRoomIdOrderByUpdateTimeDesc(Integer restroomId);
 }

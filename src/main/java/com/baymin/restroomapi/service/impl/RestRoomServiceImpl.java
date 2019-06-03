@@ -12,6 +12,7 @@ import com.baymin.restroomapi.service.RestRoomService;
 import com.baymin.restroomapi.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,10 @@ public class RestRoomServiceImpl implements RestRoomService {
     private RestRoomSpecs restRoomSpecs;
     @Autowired
     private RestRoomDao restRoomDao;
-
     @Autowired
     private InfoPassengerFlowDao iPFlowDao;
-
+    @Value("${restroom.fuck-flow-save-interval}")
+    private boolean isSaveInterval;
 
     @Override
     public Object updateByRestRoomId(Integer restRoomId, Optional<String> name,Optional<String> ip, Optional<String> region, Optional<String> address,Optional<Float> longitude,Optional<Float> latitude,Optional<String> cleaner, Optional<String> remark, Optional<Integer> status) throws MyException {
@@ -114,22 +115,33 @@ public class RestRoomServiceImpl implements RestRoomService {
         return R.callBackRet(restRoomDao.findFirstByIp(fuckFlow.getIpAddress()), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
-                Integer oldNum=0;
                 RestRoom restRoom = (RestRoom)data;
-                oldNum = restRoom.getPeopleNum();
+                Integer oldNum = restRoom.getPeopleNum();
                 restRoom.setPeopleNum(fuckFlow.getPeopleCounting().getEnter());
-
-
                 if(Utils.isYeaterday(restRoom.getUpdateTime(),null) == -1){ //表示是同一天
-                    InfoPassengerFlow infoPassengerFlow=new InfoPassengerFlow();
-                    infoPassengerFlow.setIp(fuckFlow.getIpAddress());
-                    infoPassengerFlow.setRestRoom(restRoom);
-
                     Integer num= restRoom.getPeopleNum()-oldNum;
-                    if(num<0) num=0;
-                    infoPassengerFlow.setNumber(num);
-                    iPFlowDao.save(infoPassengerFlow);
+                    if(num>0) { //只保留有客流的数据
+                        //region 更新半小时内的数据
+                        InfoPassengerFlow infoPassengerFlow = isSaveInterval
+                                ?
+                                iPFlowDao.findFirstByRestRoom_RestRoomIdOrderByUpdateTimeDesc(restRoom.getRestRoomId()).orElse(new InfoPassengerFlow())
+                                :
+                                new InfoPassengerFlow();
 
+                        long diff = new Date().getHours() - infoPassengerFlow.getUpdateTime().getHours();
+                        if (diff==0) {
+                            infoPassengerFlow.setNumber(infoPassengerFlow.getNumber()+num);
+                        }
+                        else {
+                            infoPassengerFlow = new InfoPassengerFlow();
+                            infoPassengerFlow.setNumber(num);
+                        }
+                        infoPassengerFlow.setIp(fuckFlow.getIpAddress());
+                        infoPassengerFlow.setRestRoom(restRoom);
+                        infoPassengerFlow.setUpdateTime(new Date());
+                        //endregion
+                        iPFlowDao.save(infoPassengerFlow);
+                    }
                     restRoom.setPeopleNum(oldNum+num);
                 }
 
