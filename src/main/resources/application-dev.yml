@@ -14,6 +14,7 @@ restroom:
   push-file-path: /opt/lampp/htdocs/stream/hls_$1 #直播流保存的文件路径$1表示摄像头id
   enable-stop-push: true
   weather-url: http://www.nmc.cn/f/rest/real/58562
+  fuck-flow-save-interval: true #true：表示客流在单位小时内累加 false：反
 management:
   endpoints:
     web:
