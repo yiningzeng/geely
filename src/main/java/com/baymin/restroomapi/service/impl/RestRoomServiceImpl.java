@@ -144,6 +144,13 @@ public class RestRoomServiceImpl implements RestRoomService {
                         restRoom.setPeopleNum(oldNum+num);
                     }
                 }
+                else {
+                    InfoPassengerFlow i =new InfoPassengerFlow();
+                    i.setNumber(restRoom.getPeopleNum());
+                    i.setRestRoom(restRoom);
+                    i.setIp(fuckFlow.getIpAddress());
+                    iPFlowDao.save(i);
+                }
                 restRoom.setUpdateTime(new Date());
                 restRoomDao.save(restRoom);
                 return R.success();
