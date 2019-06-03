@@ -53,9 +53,18 @@ public interface DeviceBoardService {
 
     /**
      * 公厕公告屏主动获取信息
-     * @param request
+     * @param ip
      * @return
      * @throws MyException
      */
-    Object giveMeFive(HttpServletRequest request) throws MyException;
+    Object giveMeFive(String ip) throws MyException;
+
+    /**
+     * 公厕公告屏主动刷新客流
+     * @param ip
+     * @return
+     * @throws MyException
+     */
+    Object getOnlyFuckFlow(String ip) throws MyException;
+
 }

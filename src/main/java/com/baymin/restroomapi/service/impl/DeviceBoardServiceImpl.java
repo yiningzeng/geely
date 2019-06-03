@@ -114,13 +114,11 @@ public class DeviceBoardServiceImpl implements DeviceBoardService {
     }
 
     @Override
-    public Object giveMeFive(HttpServletRequest request) throws MyException {
-        String ip = Utils.getIpAddr(request);
-        log.info("ip访问：{}",ip);
+    public Object giveMeFive(String ip) throws MyException {
+
         return R.callBackRet(deviceBoardDao.findFirstByIp(ip), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
-
 
                 DeviceBoard deviceBoard =(DeviceBoard)data;
                 Integer restroomId = deviceBoard.getRestRoom().getRestRoomId();
@@ -145,11 +143,6 @@ public class DeviceBoardServiceImpl implements DeviceBoardService {
                 giveMeFive.setGas(gasInfo);
                 //endregion
 
-                //region
-                //endregion
-//                giveMeFive.setFuckFlow();
-//                if(retPage.getSize()>0)return R.success(retPage);else return R.error(ResultEnum.NO_LIST,retPage);
-
                 return R.success(giveMeFive);
             }
             @Override
@@ -158,4 +151,21 @@ public class DeviceBoardServiceImpl implements DeviceBoardService {
             }
         });
     }
+
+    @Override
+    public Object getOnlyFuckFlow(String ip) throws MyException {
+        return R.callBackRet(deviceBoardDao.findFirstByIp(ip), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                DeviceBoard deviceBoard =(DeviceBoard)data;
+                Integer restroomId = deviceBoard.getRestRoom().getRestRoomId();
+                return R.success(infoPassengerFlowDao.findAllSumNumber(restroomId, DateUtils.getDayBegin().toString(), DateUtils.getDayEnd().toString()));
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
 }

@@ -102,11 +102,20 @@ public class DeviceBoardController {
         return deviceBoardService.findAll(1,Optional.ofNullable(status),PageRequest.of(page,size,"asc".equals(sortType)?Sort.Direction.ASC:Sort.Direction.DESC,sortField));
     }
 
-
     @ApiOperation(value="公告屏主动请求获取公厕的信息by it's ip")
     @GetMapping(value = "/hi-give-me-five")
     public Object getMeFive(HttpServletRequest request) throws MyException {
-        return deviceBoardService.giveMeFive(request);
+        String ip = Utils.getIpAddr(request);
+        log.info("ip访问：{}",ip);
+        return deviceBoardService.giveMeFive(ip);
+    }
+
+    @ApiOperation(value="测试-公告屏主动请求获取公厕的信息by it's ip")
+    @GetMapping(value = "/hi-give-me-five-test")
+    public Object getMeFiveTest(HttpServletRequest request) throws MyException {
+        return deviceBoardService.giveMeFive("192.168.10.6");
+    }
+
     @ApiOperation(value="只获取当天的客流by it's ip")
     @GetMapping(value = "/get-fuck-flow")
     public Object getOnlyFuckFlow(HttpServletRequest request) throws MyException {
