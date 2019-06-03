@@ -13,6 +13,7 @@ import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.ret.model.GasInfo;
 import com.baymin.restroomapi.ret.model.GiveMeFive;
+import com.baymin.restroomapi.ret.model.RetOnlyFuckFlow;
 import com.baymin.restroomapi.service.DeviceBoardService;
 import com.baymin.restroomapi.service.DeviceCameraService;
 import com.baymin.restroomapi.utils.DateUtils;
@@ -159,7 +160,11 @@ public class DeviceBoardServiceImpl implements DeviceBoardService {
             public Object onTrue(Object data) {
                 DeviceBoard deviceBoard =(DeviceBoard)data;
                 Integer restroomId = deviceBoard.getRestRoom().getRestRoomId();
-                return R.success(infoPassengerFlowDao.findAllSumNumber(restroomId, DateUtils.getDayBegin().toString(), DateUtils.getDayEnd().toString()));
+                RetOnlyFuckFlow ret =new RetOnlyFuckFlow();
+                ret.setToday(infoPassengerFlowDao.findAllSumNumber(restroomId, DateUtils.getDayBegin().toString(), DateUtils.getDayEnd().toString()));
+                ret.setMonth(infoPassengerFlowDao.findAllSumNumber(restroomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString()));
+                ret.setAll(infoPassengerFlowDao.findAllSumNumberNoTime(restroomId));
+                return R.success(ret);
             }
             @Override
             public Object onFalse() {
