@@ -3,14 +3,17 @@ package com.baymin.restroomapi.service.impl;
 import com.baymin.restroomapi.config.RedisUtils;
 import com.baymin.restroomapi.config.okhttp3.MyOkHttpClient;
 import com.baymin.restroomapi.dao.DeviceGasDao;
+import com.baymin.restroomapi.dao.InfoGasDao;
 import com.baymin.restroomapi.dao.RestRoomDao;
 import com.baymin.restroomapi.entity.DeviceGas;
+import com.baymin.restroomapi.entity.InfoGas;
 import com.baymin.restroomapi.entity.RestRoom;
 import com.baymin.restroomapi.ret.R;
 import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
 import com.baymin.restroomapi.ret.model.GasInfo;
 import com.baymin.restroomapi.service.DeviceGasService;
+import com.baymin.restroomapi.utils.Utils;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -43,9 +42,10 @@ public class DeviceGasServiceImpl implements DeviceGasService {
     private DeviceGasDao deviceGasDao;
     @Autowired
     private RestRoomDao restRoomDao;
-
     @Autowired
     private StringRedisTemplate strRedis;
+    @Autowired
+    private InfoGasDao infoGasDao;
 
     @Override
     public Object save(Integer restRoomId, DeviceGas deviceGas) throws MyException {
@@ -218,9 +218,10 @@ public class DeviceGasServiceImpl implements DeviceGasService {
                             int numres= t.getDf()-avg+1;
                             if(numres < 0) numres=0;
                             t.set客流(numres);
-//                            t.set女厕(t.getZq()+(float)(0.2+Math.random()*(1-0.2+0.2)));
-//                            t.set大厅(t.getZq()+(float)(0.1+Math.random()*(1-0.1+0.1)));
-//                            t.set无障碍(t.getZq()+(float)(0.3+Math.random()*(1-0.3+0.3)));
+                            t.set男厕(t.getZq()+(float)(0.2+Math.random()*(1-0.2+0.2)));
+                            t.set女厕(t.getZq()+(float)(0.2+Math.random()*(1-0.2+0.2)));
+                            t.set大厅(t.getZq()+(float)(0.1+Math.random()*(1-0.1+0.1)));
+                            t.set无障碍(t.getZq()+(float)(0.3+Math.random()*(1-0.3+0.3)));
                             retTemp2.add(t);
                         }
                         gasInfo.getData().getItems().get(i).setHistroyList(retTemp2);
@@ -252,8 +253,24 @@ public class DeviceGasServiceImpl implements DeviceGasService {
         else{
             return R.error(ResultEnum.NO_LIST);
         }
+    }
 
+    @Override
+    public Object findAllGasListHomeV2(Integer restRoomId, String startTm, String endTm) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                List<DeviceGas> deviceGases = deviceGasDao.findAllByRestRoom_RestRoomId(restRoomId);
+                for (DeviceGas d:deviceGases) {
+                    d.setInfoGases(infoGasDao.findAllByDeviceGas_GasDeviceIdAndCreateTimeBetween(d.getGasDeviceId(),Utils.StrToDate(startTm),Utils.StrToDate(endTm)));
+                }
+                return R.success(deviceGases);
+            }
 
-
+            @Override
+            public Object onFalse() {
+               return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
+            }
+        });
     }
 }

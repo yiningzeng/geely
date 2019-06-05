@@ -22,7 +22,7 @@ import javax.validation.constraints.Min;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/device")
+@RequestMapping("/api")
 @Slf4j
 @Validated
 @Api(description = "气体检测操作接口done")
@@ -40,7 +40,7 @@ public class DeviceGasController {
             @ApiImplicitParam(name = "type", value = "南侧女厕，{0：男|1：女}",defaultValue = "0",required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态{0：禁用|1：启用}",defaultValue = "1",required = true, dataType = "string", paramType = "query"),
     })
-    @PostMapping("/gas")
+    @PostMapping("/v1/device/gas")
     public Object save(@RequestParam(value = "restRoomId") Integer restRoomId,
                        @RequestParam(value = "gasDeviceId") Integer gasDeviceId,
                        @RequestParam(value = "gasDeviceParentId") Integer gasDeviceParentId,
@@ -61,7 +61,7 @@ public class DeviceGasController {
             @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "gasDeviceId",value = "gasDeviceId", required = true, dataType = "string",paramType = "path"),
     })
-    @DeleteMapping(value = "/gas/{gasDeviceId}")
+    @DeleteMapping(value = "/v1/device/gas/{gasDeviceId}")
     public Object deleteRestRoom(@PathVariable("gasDeviceId") Integer gasDeviceId)throws MyException{
         return deviceGasService.deleteByDeviceGasId(gasDeviceId);
     }
@@ -82,7 +82,7 @@ public class DeviceGasController {
             @ApiImplicitParam(name = "sortType", value = "排序类型",defaultValue = "desc",required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "sortField", value = "排序字段",defaultValue = "createTime",required = false, dataType = "string", paramType = "query")
     })
-    @GetMapping(value = "/gas/{restRoomId}")
+    @GetMapping(value = "/v1/device/gas/{restRoomId}")
     public Object getRestRoomListByPage(
             @PathVariable(value = "restRoomId") Integer restRoomId,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -100,7 +100,7 @@ public class DeviceGasController {
             @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
     })
-    @GetMapping(value = "/gas/list/{restRoomId}")
+    @GetMapping(value = "/v1/device/gas/list/{restRoomId}")
     public Object getRestRoomListByPage(
             @PathVariable(value = "restRoomId") Integer restRoomId,
             @RequestParam(value = "startTm", required = false) Integer startTm,
@@ -115,12 +115,27 @@ public class DeviceGasController {
             @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
     })
-    @GetMapping(value = "/gas-home/list/{restRoomId}")
+    @GetMapping(value = "/v1/device/gas-home/list/{restRoomId}")
     public Object getRestRoomHomeListByPage(
             @PathVariable(value = "restRoomId") Integer restRoomId,
             @RequestParam(value = "startTm", required = false) Integer startTm,
             @RequestParam(value = "endTm", required = false) Integer endTm) throws Exception {
         return deviceGasService.findAllGasListHome(restRoomId,startTm,endTm);
+    }
+
+    @ApiOperation(value = "主页显示数据报表用，通过restRoomId获取气体记录，就是一次获取这个厕所所有的记录", response = RestRoom.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId", value = "公厕id",required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
+    })
+    @GetMapping(value = "/v2/device/gas-home/list/{restRoomId}")
+    public Object getRestRoomHomeListByPageV2(
+            @PathVariable(value = "restRoomId") Integer restRoomId,
+            @RequestParam(value = "startTm", required = false) String startTm,
+            @RequestParam(value = "endTm", required = false) String endTm) throws Exception {
+        return deviceGasService.findAllGasListHomeV2(restRoomId,startTm,endTm);
     }
 
 }

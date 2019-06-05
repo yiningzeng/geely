@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,6 +26,10 @@ public interface DeviceGasDao extends JpaRepository<DeviceGas, Integer>,JpaSpeci
     Optional<DeviceGas> findFirstByRestRoom_RestRoomId(Integer restRoomId);
 
     Page<DeviceGas> findAllByRestRoom_RestRoomId(Integer restRoomId, Pageable pageable);
+
+    List<DeviceGas> findAllByRestRoom_RestRoomId(Integer restRoomId);
+
+    List<DeviceGas> findAllByRestRoom_RestRoomIdAndInfoGases_CreateTimeBetween(Integer restRoomId, Date startTime, Date endTime);
 
     @Transactional
     @Modifying

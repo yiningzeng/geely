@@ -29,7 +29,7 @@ public class GasInfo {
             private String funcId;
             private Integer df;
             private Float 大厅;
-            private Integer 男厕;
+            private Float 男厕;
             private Integer 客流;
             private Float 女厕;
             private Float 无障碍;
