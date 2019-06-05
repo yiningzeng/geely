@@ -1,14 +1,12 @@
 package com.baymin.restroomapi.config.task;
 
-import com.baymin.restroomapi.dao.DeviceBoardDao;
-import com.baymin.restroomapi.dao.DeviceBoardServiceDao;
-import com.baymin.restroomapi.dao.DeviceCameraDao;
-import com.baymin.restroomapi.dao.RestRoomDao;
-import com.baymin.restroomapi.entity.DeviceBoard;
-import com.baymin.restroomapi.entity.DeviceCamera;
-import com.baymin.restroomapi.entity.RestRoom;
+import com.baymin.restroomapi.config.okhttp3.MyOkHttpClient;
+import com.baymin.restroomapi.dao.*;
+import com.baymin.restroomapi.entity.*;
+import com.baymin.restroomapi.ret.model.GasInfo;
 import com.baymin.restroomapi.utils.ShellKit;
 import com.baymin.restroomapi.utils.StreamGobblerCallback;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,6 +27,11 @@ public class ScheduledTaskService {
     private DeviceCameraDao deviceCameraDao;
     @Autowired
     private DeviceBoardDao deviceBoardDao;
+    @Autowired
+    private DeviceGasDao deviceGasDao;
+    @Autowired
+    private InfoGasDao infoGasDao;
+
 //    @Scheduled(fixedRate = 5000)//1
 //    public void reportCurrentTime(){
 ////        System.out.println("每隔五秒执行一次 "+DATE_FORMAT.format(new Date()));
@@ -65,6 +68,10 @@ public class ScheduledTaskService {
     }
 
     //@Scheduled(cron = "0 0/30 * * * ? ")//
+
+    /**
+     * 检查设备在线状态
+     */
     @Scheduled(cron = "0 0/30 * * * ? ")//
     public void fixTimeExecution(){
         log.info("在指定时间 "+DATE_FORMAT.format(new Date())+"执行");
@@ -83,6 +90,33 @@ public class ScheduledTaskService {
                 deviceBoardDao.save(d);
             }
             //endregion
+        }
+    }
+
+    /**
+     * 收集气体数据
+     * 暂定5分钟刷新一次
+     */
+    @Scheduled(cron = "0 0/30 * * * ? ")//
+    public void reFreshGasData(){
+        log.info("在指定时间 "+DATE_FORMAT.format(new Date())+" 收集气体数据");
+        List<RestRoom> restRoomList= restRoomDao.findAll();
+        for (RestRoom r:restRoomList) {
+            for (DeviceGas d:deviceGasDao.findAllByRestRoom_RestRoomId(r.getRestRoomId())) {
+                GasInfo gasInfo= new Gson().fromJson(
+                        MyOkHttpClient.getInstance().get("http://servers.aqsystems.net/aks/termdata/getTermData?funcId="+d.getGasDeviceId()),
+                        GasInfo.class);
+                if(gasInfo.getData().getItems().size()==0) continue;
+                InfoGas infoGas = new InfoGas();
+                infoGas.setDeviceGas(d);
+                infoGas.setFuncId(d.getGasDeviceId());
+                infoGas.setRestRoom(r);
+                infoGas.setScore(gasInfo.getData().getItems().get(0).getZq());
+                infoGas.setUpdateTime(new Date());
+                infoGasDao.save(infoGas);
+                d.setScore(infoGas.getScore());
+                deviceGasDao.save(d);
+            }
         }
     }
 
