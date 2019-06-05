@@ -4,11 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.7.0-RELEASE</version>
+    <version>v1.7.1-RELEASE</version>
     <packaging>jar</packaging>
     <name>鄞州智慧公厕接口</name>
     <description>
         $更新说明
+        $1.7.1
+        $新增定时任务获取气体数据
+        $接口空气数据
+        $-----------------------
         $1.7.0
         $新增公厕单独获取客流-优化数据
         $feat单客流数据优化
