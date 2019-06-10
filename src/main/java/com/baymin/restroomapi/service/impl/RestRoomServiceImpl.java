@@ -111,7 +111,7 @@ public class RestRoomServiceImpl implements RestRoomService {
     }
 
     @Override
-    public Object fuckFlow(FuckFlow fuckFlow) throws MyException {
+    public Object fuckFlowByAll(FuckFlow fuckFlow) throws MyException {
         return R.callBackRet(restRoomDao.findFirstByIp(fuckFlow.getIpAddress()), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
@@ -159,6 +159,60 @@ public class RestRoomServiceImpl implements RestRoomService {
             @Override
             public Object onFalse() {
               return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
+            }
+        });
+    }
+
+    @Override
+    public Object fuckFlowByOnce(FuckFlow fuckFlow) throws MyException {
+        return R.callBackRet(restRoomDao.findFirstByIp(fuckFlow.getIpAddress()), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                RestRoom restRoom = (RestRoom)data;
+                Integer onceFlow = fuckFlow.getPeopleCounting().getEnter();
+                if(Utils.isYeaterday(restRoom.getUpdateTime(),null) == -1){ //表示是同一天
+
+                    if(onceFlow>0) { //只保留有客流的数据
+                        //region 更新半小时内的数据
+                        InfoPassengerFlow infoPassengerFlow = isSaveInterval
+                                ?
+                                iPFlowDao.findFirstByRestRoom_RestRoomIdOrderByUpdateTimeDesc(restRoom.getRestRoomId()).orElse(new InfoPassengerFlow())
+                                :
+                                new InfoPassengerFlow();
+
+                        long diff = new Date().getHours() - infoPassengerFlow.getUpdateTime().getHours();
+                        if (diff==0) {
+                            infoPassengerFlow.setNumber(infoPassengerFlow.getNumber()+onceFlow);
+                        }
+                        else {
+                            infoPassengerFlow = new InfoPassengerFlow();
+                            infoPassengerFlow.setNumber(onceFlow);
+                        }
+                        infoPassengerFlow.setIp(fuckFlow.getIpAddress());
+                        infoPassengerFlow.setRestRoom(restRoom);
+                        infoPassengerFlow.setUpdateTime(new Date());
+                        //endregion
+                        iPFlowDao.save(infoPassengerFlow);
+                        restRoom.setPeopleNum(restRoom.getPeopleNum() + onceFlow);
+                    }
+                }
+                else {
+                    restRoom.setPeopleNum(onceFlow);
+
+                    InfoPassengerFlow i =new InfoPassengerFlow();
+                    i.setNumber(onceFlow);
+                    i.setRestRoom(restRoom);
+                    i.setIp(fuckFlow.getIpAddress());
+                    iPFlowDao.save(i);
+                }
+                restRoom.setUpdateTime(new Date());
+                restRoomDao.save(restRoom);
+                return R.success();
+            }
+
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_RESTROOM);
             }
         });
     }

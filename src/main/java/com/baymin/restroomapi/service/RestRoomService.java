@@ -60,7 +60,14 @@ public interface RestRoomService {
      * @return
      * @throws MyException
      */
-    Object fuckFlow(FuckFlow fuckFlow)throws MyException;
+    Object fuckFlowByAll(FuckFlow fuckFlow)throws MyException;
+
+    /**
+     * 公厕人流数据实时上传单次
+     * @return
+     * @throws MyException
+     */
+    Object fuckFlowByOnce(FuckFlow fuckFlow)throws MyException;
 
     /**
      * 获取公厕人流数据

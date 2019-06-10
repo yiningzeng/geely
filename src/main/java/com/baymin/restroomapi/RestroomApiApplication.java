@@ -54,7 +54,7 @@ public class RestroomApiApplication {
     public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
 
         log.info("==============end==============={}",fuckFlow.toString());
-        return restRoomService.fuckFlow(fuckFlow);
+        return restRoomService.fuckFlowByOnce(fuckFlow);
     }
 
     @ApiImplicitParams({
@@ -66,7 +66,7 @@ public class RestroomApiApplication {
         fuckFlow.setIpAddress("192.168.10.4");
         fuckFlow.setPeopleCounting(new FuckFlow.PeopleCounting(num,0,0));
         log.info("==============end==============={}",fuckFlow.toString());
-        return restRoomService.fuckFlow(fuckFlow);
+        return restRoomService.fuckFlowByOnce(fuckFlow);
     }
 
     @ResponseBody

@@ -20,7 +20,7 @@ server:
 spring:
   # 环境 dev|test|pro
   profiles:
-    active: test
+    active: vip
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
