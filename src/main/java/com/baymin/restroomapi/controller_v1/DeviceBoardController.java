@@ -116,7 +116,7 @@ public class DeviceBoardController {
         return deviceBoardService.giveMeFive("192.168.10.6");
     }
 
-    @ApiOperation(value="只获取当天的客流by it's ip")
+    @ApiOperation(value="只获取统计的的客流by it's ip")
     @GetMapping(value = "/get-fuck-flow")
     public Object getOnlyFuckFlow(HttpServletRequest request) throws MyException {
         String ip = Utils.getIpAddr(request);
@@ -124,7 +124,7 @@ public class DeviceBoardController {
         return deviceBoardService.getOnlyFuckFlow(ip);
     }
 
-    @ApiOperation(value="测试-只获取当天的客流by it's ip")
+    @ApiOperation(value="测试-只获取统计的的客流by it's ip")
     @GetMapping(value = "/get-fuck-flow-test")
     public Object getOnlyFuckFlowTest(HttpServletRequest request) throws MyException {
         return deviceBoardService.getOnlyFuckFlow("192.168.10.6");

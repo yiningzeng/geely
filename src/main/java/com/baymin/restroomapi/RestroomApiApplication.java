@@ -29,13 +29,13 @@ import java.util.Date;
  * https://www.w3cschool.cn/java/jpa-column-unique-nullable.html
  * 原型 https://pro.modao.cc/app/42d72de617fab9ec148474a4bb696ad029806028#screen=sE1496AC6781533113614692
  */
+@Slf4j
 @Controller
 @RestController
 @RequestMapping
 @SpringBootApplication
 @Configuration
 @EnableAdminServer
-@Slf4j
 @EnableCaching
 @EnableScheduling
 public class RestroomApiApplication {
@@ -52,7 +52,6 @@ public class RestroomApiApplication {
     }
     @PostMapping(value = "/api/fuck-flow", consumes = { MediaType.APPLICATION_XML_VALUE }, produces = MediaType.APPLICATION_XML_VALUE)
     public Object post(@RequestBody FuckFlow fuckFlow) throws Exception {
-
         log.info("==============end==============={}",fuckFlow.toString());
         return restRoomService.fuckFlowByOnce(fuckFlow);
     }

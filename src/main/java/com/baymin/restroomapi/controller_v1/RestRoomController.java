@@ -3,6 +3,7 @@ package com.baymin.restroomapi.controller_v1;
 import com.baymin.restroomapi.entity.RestRoom;
 import com.baymin.restroomapi.entity.User;
 import com.baymin.restroomapi.ret.exception.MyException;
+import com.baymin.restroomapi.service.DeviceBoardService;
 import com.baymin.restroomapi.service.RestRoomService;
 import com.baymin.restroomapi.service.UserService;
 import com.baymin.restroomapi.utils.Utils;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.util.Optional;
 import java.util.UUID;
@@ -145,9 +147,27 @@ public class RestRoomController {
             return restRoomService.findAll(restRoom, pageable);
         }
         return restRoomService.findAll(null,pageable);
-
-
     }
 
+
+    @ApiOperation(value="单独获取客流统计信息(人数)-[新增]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+    })
+    @GetMapping(value = "/restroom/{restRoomId}/only-get-fuck-flow")
+    public Object getOnlyFuckFlow(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
+        return restRoomService.getOnlyFuckFlow(restRoomId);
+    }
+
+    @ApiOperation(value="单独获取公厕气体设备数据-[新增]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+    })
+    @GetMapping(value = "/restroom/{restRoomId}/only-get-gas-device-info")
+    public Object getMeFiveTest(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
+        return restRoomService.getOnlyGasDeviceInfo(restRoomId);
+    }
 
 }

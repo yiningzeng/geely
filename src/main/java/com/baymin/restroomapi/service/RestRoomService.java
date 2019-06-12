@@ -75,4 +75,21 @@ public interface RestRoomService {
      * @throws MyException
      */
     Object getFuckFlow(Integer restRoomId, Integer type, String startTime, String endTime)throws MyException;
+
+    /**
+     * 单独获取客流统计
+     * @param restRoomId
+     * @return
+     * @throws MyException
+     */
+    Object getOnlyFuckFlow(Integer restRoomId) throws MyException;
+
+    /**
+     * 单独获取气体设备数据 也就是温度和气体值
+     * @param restRoomId
+     * @return
+     * @throws MyException
+     */
+    Object getOnlyGasDeviceInfo(Integer restRoomId) throws MyException;
+
 }

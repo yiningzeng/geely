@@ -1,6 +1,7 @@
 package com.baymin.restroomapi.service.impl;
 
 import com.baymin.restroomapi.config.aspect.jwt.TokenUtils;
+import com.baymin.restroomapi.dao.DeviceGasDao;
 import com.baymin.restroomapi.dao.InfoPassengerFlowDao;
 import com.baymin.restroomapi.dao.RestRoomDao;
 import com.baymin.restroomapi.dao.specs.RestRoomSpecs;
@@ -8,7 +9,9 @@ import com.baymin.restroomapi.entity.*;
 import com.baymin.restroomapi.ret.R;
 import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
+import com.baymin.restroomapi.ret.model.RetOnlyFuckFlow;
 import com.baymin.restroomapi.service.RestRoomService;
+import com.baymin.restroomapi.utils.DateUtils;
 import com.baymin.restroomapi.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class RestRoomServiceImpl implements RestRoomService {
     private RestRoomSpecs restRoomSpecs;
     @Autowired
     private RestRoomDao restRoomDao;
+    @Autowired
+    private DeviceGasDao deviceGasDao;
+
     @Autowired
     private InfoPassengerFlowDao iPFlowDao;
     @Value("${restroom.fuck-flow-save-interval}")
@@ -222,6 +228,38 @@ public class RestRoomServiceImpl implements RestRoomService {
         if(type==0) return R.success(iPFlowDao.findAll(restRoomId,startTime,endTime),iPFlowDao.findAllSumNumber(restRoomId,startTime,endTime));
         else if(type==1) return R.success(iPFlowDao.findAllOnlyShowDays(restRoomId,startTime,endTime),iPFlowDao.findAllSumNumber(restRoomId,startTime,endTime));
         return R.success(iPFlowDao.findAllOnlyShowDays(restRoomId,startTime,endTime),iPFlowDao.findAllSumNumber(restRoomId,startTime,endTime));
+    }
+
+    @Override
+    public Object getOnlyFuckFlow(Integer restRoomId) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                RetOnlyFuckFlow ret =new RetOnlyFuckFlow();
+                ret.setToday(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getDayBegin().toString(), DateUtils.getDayEnd().toString()));
+                ret.setMonth(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString()));
+                ret.setAll(iPFlowDao.findAllSumNumberNoTime(restRoomId));
+                return R.success(ret);
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
+    @Override
+    public Object getOnlyGasDeviceInfo(Integer restRoomId) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                return R.success(deviceGasDao.findAllByRestRoomIdWithQuery(restRoomId));
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
     }
 
 
