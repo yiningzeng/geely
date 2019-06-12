@@ -25,4 +25,6 @@ public interface InfoGasDao extends JpaRepository<InfoGas, Integer>,JpaSpecifica
             "from info_gas info where rest_room_id = ?1 and update_time between ?2 and ?3 GROUP BY update_time order by update_time asc", nativeQuery = true)
     List<Map<String, Object>> findAllGasInfo(Integer restRoomId, String startTime, String endTime);
 
+    @Query(value = "select ROUND(avg(score),2) from info_gas where rest_room_id =?1 and update_time between ?2 and ?3", nativeQuery = true)
+    Float getAvgByRestRoomId(Integer restRoomId, String startTime, String endTime);
 }

@@ -4,6 +4,7 @@ import com.baymin.restroomapi.config.okhttp3.MyOkHttpClient;
 import com.baymin.restroomapi.dao.*;
 import com.baymin.restroomapi.entity.*;
 import com.baymin.restroomapi.ret.model.GasInfo;
+import com.baymin.restroomapi.utils.DateUtils;
 import com.baymin.restroomapi.utils.ShellKit;
 import com.baymin.restroomapi.utils.StreamGobblerCallback;
 import com.google.gson.Gson;
@@ -31,7 +32,8 @@ public class ScheduledTaskService {
     private DeviceGasDao deviceGasDao;
     @Autowired
     private InfoGasDao infoGasDao;
-
+    @Autowired
+    private InfoGasDailyStatisticsDao infoGasDailyStatisticsDao;
 //    @Scheduled(fixedRate = 5000)//1
 //    public void reportCurrentTime(){
 ////        System.out.println("每隔五秒执行一次 "+DATE_FORMAT.format(new Date()));
@@ -117,8 +119,32 @@ public class ScheduledTaskService {
                 infoGas.setUpdateTime(newDate);
                 infoGasDao.save(infoGas);
                 d.setScore(infoGas.getScore());
+                d.setTemperature(gasInfo.getData().getItems().get(0).getEa());
                 deviceGasDao.save(d);
             }
+        }
+    }
+
+    /**
+     * 统计气体数据
+     * 每日23点45分开始统计
+     */
+    @Scheduled(cron = "0 45 23 * * ? ")//
+    public void gasStatistics(){
+        Date newDate=new Date();
+        log.info("统计气体数据->每日23点45分开始统计 "+DATE_FORMAT.format(newDate)+" 收集气体数据");
+        List<RestRoom> restRoomList= restRoomDao.findAll();
+        for (RestRoom r:restRoomList) {
+            Float avg = infoGasDao.getAvgByRestRoomId(r.getRestRoomId(), DateUtils.getDayBegin().toString(), DateUtils.getDayEnd().toString());
+            InfoGasDailyStatistics aa=new InfoGasDailyStatistics();
+            aa.setRestRoom(r);
+            aa.setScore(avg);
+            if(0<avg && avg<=3)aa.setRemark("优秀");
+            else if(3<avg && avg<=5)aa.setRemark("良好");
+            else if(5<avg && avg<=7)aa.setRemark("一般");
+            else if(7<avg && avg<=9)aa.setRemark("很差");
+            else if(9<avg)aa.setRemark("极差");
+            infoGasDailyStatisticsDao.save(aa);
         }
     }
 
