@@ -92,4 +92,12 @@ public interface RestRoomService {
      */
     Object getOnlyGasDeviceInfo(Integer restRoomId) throws MyException;
 
+    /**
+     * 获取公厕气体统计数据(不同状态分别有几天根据时间)
+     * @param restRoomId
+     * @return
+     * @throws MyException
+     */
+    Object getGasStatistic(Integer restRoomId, String startTime, String endTime) throws MyException;
+
 }

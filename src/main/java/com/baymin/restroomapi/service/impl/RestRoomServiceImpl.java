@@ -2,6 +2,7 @@ package com.baymin.restroomapi.service.impl;
 
 import com.baymin.restroomapi.config.aspect.jwt.TokenUtils;
 import com.baymin.restroomapi.dao.DeviceGasDao;
+import com.baymin.restroomapi.dao.InfoGasDailyStatisticsDao;
 import com.baymin.restroomapi.dao.InfoPassengerFlowDao;
 import com.baymin.restroomapi.dao.RestRoomDao;
 import com.baymin.restroomapi.dao.specs.RestRoomSpecs;
@@ -32,7 +33,8 @@ public class RestRoomServiceImpl implements RestRoomService {
     private RestRoomDao restRoomDao;
     @Autowired
     private DeviceGasDao deviceGasDao;
-
+    @Autowired
+    private InfoGasDailyStatisticsDao infoGasDailyStatisticsDao;
     @Autowired
     private InfoPassengerFlowDao iPFlowDao;
     @Value("${restroom.fuck-flow-save-interval}")
@@ -254,6 +256,20 @@ public class RestRoomServiceImpl implements RestRoomService {
             @Override
             public Object onTrue(Object data) {
                 return R.success(deviceGasDao.findAllByRestRoomIdWithQuery(restRoomId));
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
+    @Override
+    public Object getGasStatistic(Integer restRoomId, String startTime, String endTime) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                return R.success(infoGasDailyStatisticsDao.findGasStatusOfDayCount(restRoomId, startTime, endTime));
             }
             @Override
             public Object onFalse() {
