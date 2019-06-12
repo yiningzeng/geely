@@ -191,7 +191,7 @@ public class RestRoomController {
             @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
     })
-    @GetMapping(value = "/restroom/{restRoomId}/statistic")
+    @GetMapping(value = "/restroom/{restRoomId}/statistic-with-day")
     public Object getStatisticWithDay(@PathVariable("restRoomId") Integer restRoomId,
                                @RequestParam(value = "startTm", required = false) String startTm,
                                @RequestParam(value = "endTm", required = false) String endTm) throws MyException {
