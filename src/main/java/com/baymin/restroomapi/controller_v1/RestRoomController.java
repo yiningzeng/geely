@@ -183,4 +183,18 @@ public class RestRoomController {
                                @RequestParam(value = "endTm", required = false) String endTm) throws MyException {
         return restRoomService.getGasStatistic(restRoomId, startTm, endTm);
     }
+
+    @ApiOperation(value="获取公厕气体每天平均数据-[新增]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+            @ApiImplicitParam(name = "startTm", value = "开始时间", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "endTm", value = "结束时间", dataType = "string", paramType = "query"),
+    })
+    @GetMapping(value = "/restroom/{restRoomId}/statistic")
+    public Object getStatisticWithDay(@PathVariable("restRoomId") Integer restRoomId,
+                               @RequestParam(value = "startTm", required = false) String startTm,
+                               @RequestParam(value = "endTm", required = false) String endTm) throws MyException {
+        return restRoomService.getGasStatisticWithDay(restRoomId, startTm, endTm);
+    }
 }

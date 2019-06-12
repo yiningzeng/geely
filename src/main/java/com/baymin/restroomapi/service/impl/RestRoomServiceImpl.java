@@ -278,5 +278,19 @@ public class RestRoomServiceImpl implements RestRoomService {
         });
     }
 
+    @Override
+    public Object getGasStatisticWithDay(Integer restRoomId, String startTime, String endTime) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                return R.success(infoGasDailyStatisticsDao.findAllByRestRoom_RestRoomIdAndCreateTimeBetween(restRoomId, Utils.StrToDate(startTime),  Utils.StrToDate(endTime)));
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
 
 }

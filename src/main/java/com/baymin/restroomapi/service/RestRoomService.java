@@ -100,4 +100,11 @@ public interface RestRoomService {
      */
     Object getGasStatistic(Integer restRoomId, String startTime, String endTime) throws MyException;
 
+    /**
+     * 获取公厕气体每天平均数据
+     * * @param restRoomId
+     * @return
+     * @throws MyException
+     */
+    Object getGasStatisticWithDay(Integer restRoomId, String startTime, String endTime) throws MyException;
 }
