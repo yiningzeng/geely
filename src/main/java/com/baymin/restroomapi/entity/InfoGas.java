@@ -37,6 +37,9 @@ public class InfoGas implements Serializable {
     @ApiModelProperty(value = "是否及格",example = "0:不及格|1:及格")
     private Integer status;
 
+    @ApiModelProperty(value = "{0：大厅|1：女厕|2：男厕|3：无障碍}")
+    private Integer type;
+
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
     private Date createTime = new Date();

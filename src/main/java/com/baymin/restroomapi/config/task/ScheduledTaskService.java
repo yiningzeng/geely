@@ -99,7 +99,8 @@ public class ScheduledTaskService {
      */
     @Scheduled(cron = "0 0/30 * * * ? ")//
     public void reFreshGasData(){
-        log.info("在指定时间 "+DATE_FORMAT.format(new Date())+" 收集气体数据");
+        Date newDate=new Date();
+        log.info("在指定时间 "+DATE_FORMAT.format(newDate)+" 收集气体数据");
         List<RestRoom> restRoomList= restRoomDao.findAll();
         for (RestRoom r:restRoomList) {
             for (DeviceGas d:deviceGasDao.findAllByRestRoom_RestRoomId(r.getRestRoomId())) {
@@ -111,8 +112,9 @@ public class ScheduledTaskService {
                 infoGas.setDeviceGas(d);
                 infoGas.setFuncId(d.getGasDeviceId());
                 infoGas.setRestRoom(r);
+                infoGas.setType(d.getType());
                 infoGas.setScore(gasInfo.getData().getItems().get(0).getZq());
-                infoGas.setUpdateTime(new Date());
+                infoGas.setUpdateTime(newDate);
                 infoGasDao.save(infoGas);
                 d.setScore(infoGas.getScore());
                 deviceGasDao.save(d);

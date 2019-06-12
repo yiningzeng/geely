@@ -260,11 +260,12 @@ public class DeviceGasServiceImpl implements DeviceGasService {
         return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
-                List<DeviceGas> deviceGases = deviceGasDao.findAllByRestRoom_RestRoomId(restRoomId);
-                for (DeviceGas d:deviceGases) {
-                    d.setInfoGases(infoGasDao.findAllByDeviceGas_GasDeviceIdAndCreateTimeBetween(d.getGasDeviceId(),Utils.StrToDate(startTm),Utils.StrToDate(endTm)));
-                }
-                return R.success(deviceGases);
+                return R.success(infoGasDao.findAllGasInfo(restRoomId, startTm, endTm));
+//                List<DeviceGas> deviceGases = deviceGasDao.findAllByRestRoom_RestRoomId(restRoomId);
+//                for (DeviceGas d:deviceGases) {
+//                    d.setInfoGases(infoGasDao.findAllByDeviceGas_GasDeviceIdAndCreateTimeBetween(d.getGasDeviceId(),Utils.StrToDate(startTm),Utils.StrToDate(endTm)));
+//                }
+//                return R.success(deviceGases);
             }
 
             @Override
