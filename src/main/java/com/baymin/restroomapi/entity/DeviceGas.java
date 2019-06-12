@@ -53,6 +53,9 @@ public class DeviceGas implements Serializable {
     @ApiModelProperty(value = "实时数据1.5 30分钟刷新一次")
     private Float score;
 
+    @ApiModelProperty(value = "实时数据温度 30分钟刷新一次")
+    private Float temperature;
+
     @ApiModelProperty(value = "空气检测类型{0：禁用|1：启用}", example = "1")
     private Integer status=1;
     //@Temporal(TemporalType.TIMESTAMP)
