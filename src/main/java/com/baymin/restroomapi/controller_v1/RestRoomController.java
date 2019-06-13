@@ -197,4 +197,25 @@ public class RestRoomController {
                                @RequestParam(value = "endTm", required = false) String endTm) throws MyException {
         return restRoomService.getGasStatisticWithDay(restRoomId, startTm, endTm);
     }
+
+
+    @ApiOperation(value="获取本周与上周对比数据(人数)-[新增]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+    })
+    @GetMapping(value = "/restroom/{restRoomId}/week")
+    public Object getOnlyFuckFlowByWeek(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
+        return restRoomService.getOnlyFuckFlowWithTypeAndWeek(restRoomId);
+    }
+
+    @ApiOperation(value="获取本月与上月对比数据(人数)-[新增]")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+    })
+    @GetMapping(value = "/restroom/{restRoomId}/month")
+    public Object getOnlyFuckFlowByMonth(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
+        return restRoomService.getOnlyFuckFlowWithTypeAndMonth(restRoomId);
+    }
 }

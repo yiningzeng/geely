@@ -107,4 +107,9 @@ public interface RestRoomService {
      * @throws MyException
      */
     Object getGasStatisticWithDay(Integer restRoomId, String startTime, String endTime) throws MyException;
+
+    Object getOnlyFuckFlowWithTypeAndWeek(Integer restRoomId) throws MyException;
+
+    Object getOnlyFuckFlowWithTypeAndMonth(Integer restRoomId) throws MyException;
+
 }

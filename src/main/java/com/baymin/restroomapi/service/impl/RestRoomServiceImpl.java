@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -284,6 +286,38 @@ public class RestRoomServiceImpl implements RestRoomService {
             @Override
             public Object onTrue(Object data) {
                 return R.success(infoGasDailyStatisticsDao.findAllByRestRoom_RestRoomIdAndCreateTimeBetween(restRoomId, Utils.StrToDate(startTime),  Utils.StrToDate(endTime)));
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
+    @Override
+    public Object getOnlyFuckFlowWithTypeAndWeek(Integer restRoomId) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本周", restRoomId, DateUtils.getBeginDayOfWeek().toString(), DateUtils.getEndDayOfWeek().toString());
+                rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上周", restRoomId, DateUtils.getBeginDayOfLastWeek().toString(), DateUtils.getEndDayOfLastWeek().toString()));
+                return R.success(rest);
+            }
+            @Override
+            public Object onFalse() {
+                return R.error(ResultEnum.FAIL_DO_NO_DEVICE);
+            }
+        });
+    }
+
+    @Override
+    public Object getOnlyFuckFlowWithTypeAndMonth(Integer restRoomId) throws MyException {
+        return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
+            @Override
+            public Object onTrue(Object data) {
+                List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本月", restRoomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString());
+                rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上月", restRoomId, DateUtils.getBeginDayOfLastMonth().toString(), DateUtils.getEndDayOfLastMonth().toString()));
+                return R.success(rest);
             }
             @Override
             public Object onFalse() {
