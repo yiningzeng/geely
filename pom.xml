@@ -4,13 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.7.5-RELEASE</version>
+    <version>v1.7.6-RELEASE</version>
     <packaging>jar</packaging>
     <name>鄞州智慧公厕接口</name>
     <description>
         $更新说明
-        $1.7.5
+        $1.7.6
         $获取 1.本周与上周 2.本月与上月 对比数据接口
+        $对比数据优化 统一横坐标数值
         $-----------------------
         $1.7.4
         $feat获取公厕气体每天平均数据，根据时间区间

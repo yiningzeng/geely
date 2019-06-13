@@ -294,14 +294,44 @@ public class RestRoomServiceImpl implements RestRoomService {
         });
     }
 
+    List<Map<String, Object>> setWeek(List<Map<String, Object>> rest){
+        for (int i =0;i< 7; i++) {
+            switch (i){
+                case 0:
+                    rest.get(i).put("show_time", "周一");
+                    break;
+                case 1:
+                    rest.get(i).put("show_time", "周二");
+                    break;
+                case 2:
+                    rest.get(i).put("show_time", "周三");
+                    break;
+                case 3:
+                    rest.get(i).put("show_time", "周四");
+                    break;
+                case 4:
+                    rest.get(i).put("show_time", "周五");
+                    break;
+                case 5:
+                    rest.get(i).put("show_time", "周六");
+                    break;
+                case 6:
+                    rest.get(i).put("show_time", "周日");
+                    break;
+            }
+        }
+        return rest;
+    }
+
     @Override
     public Object getOnlyFuckFlowWithTypeAndWeek(Integer restRoomId) throws MyException {
         return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
                 List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本周", restRoomId, DateUtils.getBeginDayOfWeek().toString(), DateUtils.getEndDayOfWeek().toString());
+                rest = setWeek(rest);
                 rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上周", restRoomId, DateUtils.getBeginDayOfLastWeek().toString(), DateUtils.getEndDayOfLastWeek().toString()));
-                return R.success(rest);
+                return R.success(setWeek(rest));
             }
             @Override
             public Object onFalse() {
