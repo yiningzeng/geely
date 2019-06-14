@@ -21,10 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -294,34 +291,59 @@ public class RestRoomServiceImpl implements RestRoomService {
         });
     }
 
+
+
+    List<Map<String, Object>> replace(List<Map<String, Object>> rest, Integer i, String key, Object object){
+        Map<String, Object> one = rest.get(i);
+        HashMap<String, Object> newOne = new HashMap<>();
+        newOne.putAll(one);
+        newOne.put(key,object);
+        rest.remove(one);
+        rest.add(i, newOne);
+        return rest;
+    }
+
+    // region 更改周的通用数据
     List<Map<String, Object>> setWeek(List<Map<String, Object>> rest){
         for (int i =0;i< 7; i++) {
+            if(i>=rest.size())break;
             switch (i){
                 case 0:
-                    rest.get(i).put("show_time", "周一");
+                    rest = replace(rest, i, "day_of_week","周一");
                     break;
                 case 1:
-                    rest.get(i).put("show_time", "周二");
+                    rest = replace(rest, i, "day_of_week","周二");
                     break;
                 case 2:
-                    rest.get(i).put("show_time", "周三");
+                    rest = replace(rest, i, "day_of_week","周三");
                     break;
                 case 3:
-                    rest.get(i).put("show_time", "周四");
+                    rest = replace(rest, i, "day_of_week","周四");
                     break;
                 case 4:
-                    rest.get(i).put("show_time", "周五");
+                    rest = replace(rest, i, "day_of_week","周五");
                     break;
                 case 5:
-                    rest.get(i).put("show_time", "周六");
+                    rest = replace(rest, i, "day_of_week","周六");
                     break;
                 case 6:
-                    rest.get(i).put("show_time", "周日");
+                    rest = replace(rest, i, "day_of_week","周日");
                     break;
             }
         }
         return rest;
     }
+    // endregion
+
+    // region 更改月的通用数据
+    List<Map<String, Object>> setMonth(List<Map<String, Object>> rest){
+        for (int i =0;i< 31; i++) {
+            if(i>=rest.size())break;
+            rest = replace(rest, i, "day_of_month", rest.get(i).get("show_time").toString().split("-")[2]);
+        }
+        return rest;
+    }
+    // endregion
 
     @Override
     public Object getOnlyFuckFlowWithTypeAndWeek(Integer restRoomId) throws MyException {
@@ -346,8 +368,9 @@ public class RestRoomServiceImpl implements RestRoomService {
             @Override
             public Object onTrue(Object data) {
                 List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本月", restRoomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString());
+                rest = setMonth(rest);
                 rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上月", restRoomId, DateUtils.getBeginDayOfLastMonth().toString(), DateUtils.getEndDayOfLastMonth().toString()));
-                return R.success(rest);
+                return R.success(setMonth(rest));
             }
             @Override
             public Object onFalse() {
