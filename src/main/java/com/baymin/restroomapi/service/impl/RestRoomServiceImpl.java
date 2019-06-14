@@ -10,6 +10,7 @@ import com.baymin.restroomapi.entity.*;
 import com.baymin.restroomapi.ret.R;
 import com.baymin.restroomapi.ret.enums.ResultEnum;
 import com.baymin.restroomapi.ret.exception.MyException;
+import com.baymin.restroomapi.ret.model.RetFuckFlowContrast;
 import com.baymin.restroomapi.ret.model.RetOnlyFuckFlow;
 import com.baymin.restroomapi.service.RestRoomService;
 import com.baymin.restroomapi.utils.DateUtils;
@@ -353,7 +354,11 @@ public class RestRoomServiceImpl implements RestRoomService {
                 List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本周", restRoomId, DateUtils.getBeginDayOfWeek().toString(), DateUtils.getEndDayOfWeek().toString());
                 rest = setWeek(rest);
                 rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上周", restRoomId, DateUtils.getBeginDayOfLastWeek().toString(), DateUtils.getEndDayOfLastWeek().toString()));
-                return R.success(setWeek(rest));
+                RetFuckFlowContrast f = new RetFuckFlowContrast();
+                f.setList(setWeek(rest));
+                f.setThisWeek(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getBeginDayOfWeek().toString(), DateUtils.getEndDayOfWeek().toString()));
+                f.setLastWeek(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getBeginDayOfLastWeek().toString(), DateUtils.getEndDayOfLastWeek().toString()));
+                return R.success(f);
             }
             @Override
             public Object onFalse() {
@@ -370,7 +375,11 @@ public class RestRoomServiceImpl implements RestRoomService {
                 List<Map<String, Object>> rest = iPFlowDao.findAllOnlyShowDaysWithTitle("本月", restRoomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString());
                 rest = setMonth(rest);
                 rest.addAll(0, iPFlowDao.findAllOnlyShowDaysWithTitle("上月", restRoomId, DateUtils.getBeginDayOfLastMonth().toString(), DateUtils.getEndDayOfLastMonth().toString()));
-                return R.success(setMonth(rest));
+                RetFuckFlowContrast f = new RetFuckFlowContrast();
+                f.setList(setMonth(rest));
+                f.setThisMonth(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getBeginDayOfMonth().toString(), DateUtils.getEndDayOfMonth().toString()));
+                f.setLastMonth(iPFlowDao.findAllSumNumber(restRoomId, DateUtils.getBeginDayOfLastMonth().toString(), DateUtils.getEndDayOfLastMonth().toString()));
+                return R.success(f);
             }
             @Override
             public Object onFalse() {

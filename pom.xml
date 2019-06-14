@@ -4,13 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.7.7-RELEASE</version>
+    <version>v1.7.9-RELEASE</version>
     <packaging>jar</packaging>
     <name>鄞州智慧公厕接口</name>
     <description>
         $更新说明
-        $1.7.7
+        $1.7.9
         $1.本周与上周 2.本月与上月 横坐标统一修复bug
+        $对比接口新增本周上周本月上月的总统计
         $-----------------------
         $1.7.6
         $获取 1.本周与上周 2.本月与上月 对比数据接口

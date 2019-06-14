@@ -30,5 +30,9 @@ public interface InfoPassengerFlowDao extends JpaRepository<InfoPassengerFlow, I
             value = "SELECT ?1 as type, DATE_FORMAT(update_time,'%Y-%m-%d') show_time, sum(number) number from info_passenger_flow where rest_room_id=?2 and update_time between ?3 and ?4 group by show_time order by show_time asc", nativeQuery = true)
     List<Map<String, Object>> findAllOnlyShowDaysWithTitle(String type, Integer restRoomId, String startTime, String endTime);
 
+    @Query(name = "查询所有人数show days 并有title显示，主要用于本周上周本月上月等查询接口",
+            value = "SELECT ?1 as type, sum(number) number from info_passenger_flow where rest_room_id=?2 and update_time between ?3 and ?4", nativeQuery = true)
+    List<Map<String, Object>> findAllNumberWithTitle(String type, Integer restRoomId, String startTime, String endTime);
+
     Optional<InfoPassengerFlow> findFirstByRestRoom_RestRoomIdOrderByUpdateTimeDesc(Integer restroomId);
 }
