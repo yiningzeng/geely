@@ -16,8 +16,11 @@ import java.util.Map;
  */
 public interface InfoGasDailyStatisticsDao extends JpaRepository<InfoGasDailyStatistics, Integer>,JpaSpecificationExecutor<InfoGasDailyStatistics> {
 
-    @Query(value = "select remark, count(*) as 'num', DATE_FORMAT(update_time,'%H:%i') as 'show_time' from info_gas_daily_statistics where rest_room_id =?1 and create_time between ?2 and ?3 group by remark", nativeQuery = true)
+    @Query(value = "select remark, count(*) as 'num', DATE_FORMAT(create_time,'%m-%d') as 'show_time' from info_gas_daily_statistics where rest_room_id =?1 and create_time between ?2 and ?3 group by remark", nativeQuery = true)
     List<Map<String, Object>> findGasStatusOfDayCount(Integer restRoomId, String startTime, String endTime);
+
+    @Query(value = "select remark, score, DATE_FORMAT(create_time,'%m-%d') as 'show_time' from info_gas_daily_statistics where rest_room_id =?1 and create_time between ?2 and ?3", nativeQuery = true)
+    List<Map<String, Object>> findAllGasStatus(Integer restRoomId, String startTime, String endTime);
 
     List<InfoGasDailyStatistics> findAllByRestRoom_RestRoomIdAndCreateTimeBetween(Integer restRoomId, Date startTime, Date endTime);
 }
