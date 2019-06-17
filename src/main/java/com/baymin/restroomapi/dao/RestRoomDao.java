@@ -1,6 +1,7 @@
 package com.baymin.restroomapi.dao;
 
 import com.baymin.restroomapi.entity.RestRoom;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;

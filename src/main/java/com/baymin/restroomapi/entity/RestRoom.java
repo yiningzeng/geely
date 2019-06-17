@@ -75,24 +75,25 @@ public class RestRoom implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonManagedReference
+//    @JsonIgnore
     @ApiModelProperty(value = "厕所里气体检测")
     private List<DeviceGas> deviceGases= new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "restRoom",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonManagedReference
-    @ApiModelProperty(value = "厕所人流数据")
-    private List<InfoPassengerFlow> infoPassengerFlows= new ArrayList<>();
-
-
-    @OneToMany(mappedBy = "restRoom",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonManagedReference
-    @ApiModelProperty(value = "厕所气体数据")
-    private List<InfoGas> infoGases= new ArrayList<>();
+//    @OneToMany(mappedBy = "restRoom",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    @JsonManagedReference
+//    @ApiModelProperty(value = "厕所人流数据")
+//    private List<InfoPassengerFlow> infoPassengerFlows= new ArrayList<>();
+//
+//
+//    @OneToMany(mappedBy = "restRoom",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    @JsonManagedReference
+//    @ApiModelProperty(value = "厕所气体数据")
+//    private List<InfoGas> infoGases= new ArrayList<>();
 
     public void addDeviceCamera(DeviceCamera comment) {
         deviceCameras.add(comment);

@@ -62,12 +62,12 @@ public class DeviceGas implements Serializable {
     @ApiModelProperty(value = "创建时间", example = "1")
     private Date createTime = new Date();
 
-    @OneToMany(mappedBy = "deviceGas",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonManagedReference
-    @ApiModelProperty(value = "单个气体设备采集的数据")
-    private List<InfoGas> infoGases= new ArrayList<>();
+//    @OneToMany(mappedBy = "deviceGas",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    @JsonManagedReference
+//    @ApiModelProperty(value = "单个气体设备采集的数据")
+//    private List<InfoGas> infoGases= new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restRoomId")

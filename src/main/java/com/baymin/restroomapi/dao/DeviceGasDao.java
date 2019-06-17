@@ -34,7 +34,7 @@ public interface DeviceGasDao extends JpaRepository<DeviceGas, Integer>,JpaSpeci
     @Query(name = "只查询气体设备的一条最新的温度和气值",value = "select * from device_gas where rest_room_id =?1", nativeQuery = true)
     List<Map<String, Object>> findAllByRestRoomIdWithQuery(Integer restRoomId);
 
-    List<DeviceGas> findAllByRestRoom_RestRoomIdAndInfoGases_CreateTimeBetween(Integer restRoomId, Date startTime, Date endTime);
+//    List<DeviceGas> findAllByRestRoom_RestRoomIdAndInfoGases_CreateTimeBetween(Integer restRoomId, Date startTime, Date endTime);
 
     @Transactional
     @Modifying
