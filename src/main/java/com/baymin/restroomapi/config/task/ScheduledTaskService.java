@@ -99,7 +99,7 @@ public class ScheduledTaskService {
      * 收集气体数据
      * 暂定5分钟刷新一次
      */
-    @Scheduled(cron = "0 0/30 * * * ? ")//
+    @Scheduled(cron = "0 0 * * * ? ")//
     public void reFreshGasData(){
         Date newDate=new Date();
         log.info("在指定时间 "+DATE_FORMAT.format(newDate)+" 收集气体数据");

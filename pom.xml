@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baymin</groupId>
     <artifactId>restroom-api</artifactId>
-    <version>v1.8.1-RELEASE</version>
+    <version>v1.8.2-RELEASE</version>
     <packaging>jar</packaging>
     <name>鄞州智慧公厕接口</name>
     <description>
