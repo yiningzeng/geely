@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface InfoGasDao extends JpaRepository<InfoGas, Integer>,JpaSpecificationExecutor<InfoGas> {
     List<InfoGas> findAllByDeviceGas_GasDeviceIdAndCreateTimeBetween(Integer deviceGasId, Date start, Date end);
 
-    @Query(value = "select id, update_time, ROUND((select score from restroom.info_gas where update_time = info.update_time and type =0 and rest_room_id = info.rest_room_id),2) as '大厅'," +
+    @Query(value = "select id, DATE_FORMAT(update_time,'%H:%i') as 'update_time', ROUND((select score from restroom.info_gas where update_time = info.update_time and type =0 and rest_room_id = info.rest_room_id),2) as '大厅'," +
             "ROUND((select score from restroom.info_gas where update_time = info.update_time and type =1 and rest_room_id = info.rest_room_id),2) as '女厕'," +
             "  ROUND((select score from restroom.info_gas where update_time = info.update_time and type =2 and rest_room_id = info.rest_room_id),2) as '男厕'," +
             "  ROUND((select score from restroom.info_gas where update_time = info.update_time and type =3 and rest_room_id = info.rest_room_id),2) as '无障碍'" +
