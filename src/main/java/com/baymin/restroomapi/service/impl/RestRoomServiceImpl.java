@@ -283,7 +283,7 @@ public class RestRoomServiceImpl implements RestRoomService {
         return R.callBackRet(restRoomDao.findById(restRoomId), new R.OptionalResult() {
             @Override
             public Object onTrue(Object data) {
-                return R.success(infoGasDailyStatisticsDao.findAllByRestRoom_RestRoomIdAndCreateTimeBetween(restRoomId, Utils.StrToDate(startTime),  Utils.StrToDate(endTime)));
+                return R.success(infoGasDailyStatisticsDao.findAllGasStatus(restRoomId, startTime,  endTime));
             }
             @Override
             public Object onFalse() {
@@ -387,6 +387,5 @@ public class RestRoomServiceImpl implements RestRoomService {
             }
         });
     }
-
 
 }

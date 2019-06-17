@@ -218,4 +218,14 @@ public class RestRoomController {
     public Object getOnlyFuckFlowByMonth(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
         return restRoomService.getOnlyFuckFlowWithTypeAndMonth(restRoomId);
     }
+
+//    @ApiOperation(value="获取气体平均数据状态在本周本月本年出现的天数-[新增]")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "authorization", value = "authorization token", required = true, dataType = "string", paramType = "header"),
+//            @ApiImplicitParam(name = "restRoomId",value = "restRoomId", required = true, dataType = "string",paramType = "path"),
+//    })
+//    @GetMapping(value = "/restroom/{restRoomId}/gas-statistics")
+//    public Object gasStatistics(@PathVariable("restRoomId") Integer restRoomId) throws MyException {
+//        return restRoomService.getNothingForGasStatistics(restRoomId);
+//    }
 }
